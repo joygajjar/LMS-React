@@ -1,0 +1,38 @@
+/* Text Color Variables */
+.text-primary {
+    color: #1c375b !important;
+}
+.text-secondary {
+    color: #6f8197 !important;
+}
+.text-dark {
+    color: #424242 !important;
+}
+
+/* Background Color Variables */
+.bg-primary {
+    background-color: #1c375b !important;
+}
+.bg-secondary {
+    background-color: #6f8197 !important;
+}
+.bg-light {
+    background-color: #e1ebf8 !important;
+}
+
+/* Button Color Variables */
+.btn-primary {
+    background-color: #1c375b !important;
+    border-color: #1c375b !important;
+    color: #ffffff !important;
+}
+.btn-secondary {
+    background-color: #6f8197 !important;
+    border-color: #6f8197 !important;
+    color: #ffffff !important;
+}
+
+/* Border Color Variables */
+.border-primary {
+    border-color: #1c375b !important;
+}
