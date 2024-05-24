@@ -7,6 +7,7 @@ import './components/assets/css/style.css';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Header } from "./components/header";
 import { AuthView } from './views/AuthView';
+import { ToastContainer } from 'react-toastify';
 export const App = () => {
   return (
     <div className="App">
@@ -14,7 +15,9 @@ export const App = () => {
         <Routes>
           <Route path="/*" element={<AuthView />} >
             </Route>
+            
         </Routes>
+        <ToastContainer /> {/* Render ToastContainer */}
       </Router>
     </div>
   );

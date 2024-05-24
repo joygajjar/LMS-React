@@ -1,32 +1,41 @@
 /* Text Color Variables */
 .text-primary {
-    color: #1c375b !important;
+    color: #325481 !important;
 }
 .text-secondary {
-    color: #6f8197 !important;
+    color: #2c89c9 !important;
 }
 .text-dark {
-    color: #424242 !important;
+    color: #6f8197 !important;
 }
+
 
 /* Background Color Variables */
 .bg-primary {
-    background-color: #1c375b !important;
+    background-color: #325481 !important;
 }
 .bg-secondary {
-    background-color: #6f8197 !important;
+    background-color: #2c89c9 !important;
 }
 .bg-light {
     background-color: #e1ebf8 !important;
 }
+.bg-dark {
+    background-color: #6f8197 !important;
+}
 
 /* Button Color Variables */
 .btn-primary {
-    background-color: #1c375b !important;
-    border-color: #1c375b !important;
+    background-color: #325481 !important;
+    border-color: #325481 !important;
     color: #ffffff !important;
 }
 .btn-secondary {
+    background-color: #2c89c9 !important;
+    border-color: #2c89c9 !important;
+    color: #ffffff !important;
+}
+.btn-dark {
     background-color: #6f8197 !important;
     border-color: #6f8197 !important;
     color: #ffffff !important;
@@ -34,5 +43,13 @@
 
 /* Border Color Variables */
 .border-primary {
-    border-color: #1c375b !important;
+    border-color: #325481 !important;
+}
+.border-light {
+    border-color: #e1ebf8 !important;
+}
+
+/* Padding Variables */
+.pb-100 {
+    padding-bottom: 100px !important;
 }
