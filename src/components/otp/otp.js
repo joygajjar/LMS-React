@@ -52,22 +52,24 @@ export const OtpSec = () => {
   const handleResendOTP = async (evt) => {
     evt.preventDefault();
     console.log("formData", formData);
-    const response = await resendOtp(formData);
-    const { status, message } = response;
-    console.log("response signup component", response);
-    if (status) {
-      toast.success("OTP Resend Successfully")
-      
-    }else {
-      if (message === "Maximum OTP attempts exceeded. Please try again later.") {
-        toast.error(message);
+    try {
+      const response = await resendOtp(formData);
+      const { status, message } = response;
+      console.log("response signup component", response);
+      if (status) {
+        toast.success("OTP Resend Successfully");
+      } else {
+        toast.error("Please Enter Valid >>>>>");
       }
-    else{
-      toast.error("Please Enter Valid >>>>>");
+    } catch (error) {
+      if (error.response && error.response.status === 404 || error.response.data === "Maximum OTP attempts exceeded. Please try again later.") {
+        toast.error("Maximum OTP attempts exceeded. Please try again later.");
+      } else {
+        toast.error("An error occurred. Please try again later.");
+        console.error("Error:", error);
+      }
     }
-  }
-};
-  
+  };
 
 
   return (
