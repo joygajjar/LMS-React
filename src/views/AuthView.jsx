@@ -1,4 +1,4 @@
-import {Route, Routes } from 'react-router-dom'
+import {Route, Routes, } from 'react-router-dom'
 import React from 'react'
 import { Header } from '../components/header'
 import { Footer } from '../components/footer'
@@ -10,8 +10,9 @@ import { OtpVerify } from '../components/otp';
 import { Registration } from '../components/registration';
 
 export const AuthView = () => {
-    return (<React.Fragment>
-         <Header />
+    return (
+    <React.Fragment>
+         <Header/>
          <Routes>
             <Route path = "/login" element={<Login />}></Route>
             <Route path = "/signup" element={<Signup />}></Route>
@@ -20,6 +21,7 @@ export const AuthView = () => {
             <Route path = "/otp" element={<OtpVerify />}></Route>
             <Route path = "/registration" element={<Registration />}></Route>
          </Routes>
-         <Footer />
-    </React.Fragment>)
+         <Footer/>
+    </React.Fragment>
+    )
 }

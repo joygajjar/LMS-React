@@ -5,32 +5,33 @@ import { Container } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { initialsendOtpData } from "../constant/ComponentState";
-import { resendOtp, sendOtp } from "../../services/authService";
+
 import queryString from "query-string";
-import "react-toastify/dist/ReactToastify.css";
-import { toast } from "react-toastify";
+import  {useAuth}  from "../../auth/hooks/useAuth";
 
 export const OtpSec = () => {
   // Get the search params from the URL
+  const { sendOtp, resendOtp } = useAuth();
   const searchParams = queryString.parse(window.location.search);
   const emailId = searchParams.email;
-  const contactNo = "+" + searchParams.contact.trim();
+  const contactNo = searchParams.contact ? "+" + searchParams.contact.trim() : "";
 
   // Initialize form data state
   const [formData, setFormData] = useState({
     ...initialsendOtpData,
     email: emailId || "",
-    contact: contactNo || ""
+    contact: contactNo || "",
   });
 
   // Initialize navigate function
   const navigate = useNavigate();
+  const [resendAttempts, setResendAttempts] = useState(0);
 
   // Handle OTP input change
   const handleOtpChange = (value, name) => {
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -41,36 +42,33 @@ export const OtpSec = () => {
     const response = await sendOtp(formData);
     const { status, message } = response;
     console.log("response signup component", response);
+    alert(message);
     if (status) {
-      toast.success("Account Registered Successfully")
-      navigate('/success'); // replace '/success' with your target route
-    }else{
-      toast.error("Please Enter Valid OTP");
+      // Navigate to the desired route on successful OTP verification
+      navigate("/login"); //target route
     }
   };
 
-  const handleResendOTP = async (evt) => {
-    evt.preventDefault();
-    console.log("formData", formData);
-    try {
+  // Handle OTP resend
+  const handleResendOtp = async () => {
+    if (resendAttempts < 5) {
+      let formData = {
+        email: emailId,
+        contact: contactNo,
+      };
       const response = await resendOtp(formData);
-      const { status, message } = response;
-      console.log("response signup component", response);
-      if (status) {
-        toast.success("OTP Resend Successfully");
+      if (response) {
+        const { message } = response;
+        alert(message);
+        navigate("/otp?email="+formData.email+"&contact="+formData.contact)
+        setResendAttempts(resendAttempts + 1);
       } else {
-        toast.error("Please Enter Valid >>>>>");
+        alert("Failed to resend OTP. Please try again later.");
       }
-    } catch (error) {
-      if (error.response && error.response.status === 404 || error.response.data === "Maximum OTP attempts exceeded. Please try again later.") {
-        toast.error("Maximum OTP attempts exceeded. Please try again later.");
-      } else {
-        toast.error("An error occurred. Please try again later.");
-        console.error("Error:", error);
-      }
+    } else {
+      alert("You have exceeded the maximum number of OTP resend attempts.");
     }
   };
-
 
   return (
     <React.Fragment>
@@ -107,7 +105,7 @@ export const OtpSec = () => {
                 />
               </div>
               <div className="resend-link text-center mb-3">
-              <Link to="#" className="text-decoration-none text-secondary" onClick={handleResendOTP}>
+                <Link to="#" className="text-decoration-none text-secondary" onClick={handleResendOtp}>
                   Resend OTP
                 </Link>
               </div>
