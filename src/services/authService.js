@@ -1,4 +1,4 @@
-import { primaryApi, secondaryApi } from './api';
+import { common_service, primaryApi, secondaryApi } from './api';
 
 export const signup = async (data) => {
     try {
@@ -6,9 +6,11 @@ export const signup = async (data) => {
         console.log("auth service response", response)
         return response.data;
     } catch (error) {
-        console.log("auth service error", error)
-        return error;
-    }
+        if (error.response && error.response.data) {
+          return { status: false, message: error.response.data.message };
+        }
+        return { status: false, message: "An unexpected error occurred" };
+      }
 }
 
 export const sendOtp = async (data) => {
@@ -17,21 +19,24 @@ export const sendOtp = async (data) => {
         console.log("auth service response", response)
         return response.data;
     } catch (error) {
-        console.log("auth service error", error)
-        return error;
-    }
+        if (error.response && error.response.data) {
+          return { status: false, message: error.response.data.message };
+        }
+        return { status: false, message: "An unexpected error occurred" };
+      }
 }
 
 export const resendOtp = async (data) => {
     try {
-        const response = await primaryApi.post('/resend-otp', data);
-        console.log("auth service response", response);
-        return response.data;
+      const response = await primaryApi.post('/resend-otp', data);
+      return response.data;
     } catch (error) {
-        console.log("auth service error", error);
-        throw error;
+      if (error.response && error.response.data) {
+        return { status: false, message: error.response.data.message };
+      }
+      return { status: false, message: "An unexpected error occurred" };
     }
-}
+  };
 
 export const login = async (data) => {
     try {
@@ -39,9 +44,11 @@ export const login = async (data) => {
         console.log("auth service response", response);
         return response.data;
     } catch (error) {
-        console.log("auth service error", error);
-        return error;
-    }
+        if (error.response && error.response.data) {
+          return { status: false, message: error.response.data.message };
+        }
+        return { status: false, message: "An unexpected error occurred" };
+      }
 }
 
 export const forgotPassword = async (data) => {
@@ -50,8 +57,10 @@ export const forgotPassword = async (data) => {
         console.log("auth service response", response);
         return response.data;
     } catch (error) {
-        console.log("auth service error", error);
-        return error;
+        if (error.response && error.response.data) {
+          return { status: false, message: error.response.data.message };
+        }
+        return { status: false, message: "An unexpected error occurred" };
     }
 }
 
@@ -61,8 +70,10 @@ export const resetPassword = async (data) => {
         console.log("auth service response", response);
         return response.data;
     } catch (error) {
-        console.log("auth service error", error);
-        return error;
+        if (error.response && error.response.data) {
+          return { status: false, message: error.response.data.message };
+        }
+        return { status: false, message: "An unexpected error occurred" };
     }
 }
 
@@ -72,8 +83,10 @@ export const validateToken = async (data) => {
         console.log("auth service response", response);
         return response.data;
     } catch (error) {
-        console.log("auth service error", error);
-        return error.response ? error.response.data : error;
+        if (error.response && error.response.data) {
+          return { status: false, message: error.response.data.message };
+        }
+        return { status: false, message: "An unexpected error occurred" };
     }
 }
 
@@ -84,8 +97,10 @@ export const registration = async (basicDetails) => {
         console.log("auth service response", response);
         return response.data;
     } catch (error) {
-        console.log("basic details service error", error);
-        throw error.response ? error.response.data : new Error('Server Error');
+        if (error.response && error.response.data) {
+          return { status: false, message: error.response.data.message };
+        }
+        return { status: false, message: "An unexpected error occurred" };
     }
 }
 
@@ -94,8 +109,10 @@ export const getAllAddmissionTypes = async () => {
         const response = await secondaryApi.get('/addmission-types');
         return response.data.data; // Assuming the data is returned in this format
     } catch (error) {
-        console.error("Failed to fetch addmission types:", error);
-        throw error;
+        if (error.response && error.response.data) {
+          return { status: false, message: error.response.data.message };
+        }
+        return { status: false, message: "An unexpected error occurred" };
     }
 }
 
@@ -104,8 +121,10 @@ export const getAllHSCPassStates = async () => {
         const response = await secondaryApi.get('/hsc-pass-states');
         return response.data.data; // Assuming the data is returned in this format
     } catch (error) {
-        console.error("Failed to fetch HSC pass states:", error);
-        throw error;
+        if (error.response && error.response.data) {
+          return { status: false, message: error.response.data.message };
+        }
+        return { status: false, message: "An unexpected error occurred" };
     }
 }
 
@@ -114,34 +133,54 @@ export const getAllHSCBoards = async () => {
         const response = await secondaryApi.get('/hsc-boards');
         return response.data.data; // Assuming the data is returned in this format
     } catch (error) {
-        console.error("Failed to fetch HSC boards:", error);
-        throw error;
+        if (error.response && error.response.data) {
+          return { status: false, message: error.response.data.message };
+        }
+        return { status: false, message: "An unexpected error occurred" };
     }
 }
-
 export const getAllReligions = async () => {
-    try {
-        const response = await secondaryApi.get(`/religions`);
-        return response.data.data;
-    } catch (error) {
-        throw new Error('Failed to fetch religions');
+  try {
+      const response = await secondaryApi.get(`/religions`);
+      return response.data;
+  } catch (error) {
+    if (error.response && error.response.data) {
+      return { status: false, message: error.response.data.message };
     }
+    return { status: false, message: "An unexpected error occurred" };
+  }
 };
 
 export const getAllCategories = async () => {
-    try {
-        const response = await secondaryApi.get(`/categories`);
-        return response.data.data;
-    } catch (error) {
-        throw new Error('Failed to fetch categories');
+  try {
+      const response = await secondaryApi.get(`/categories`);
+      return response.data;
+  } catch (error) {
+    if (error.response && error.response.data) {
+      return { status: false, message: error.response.data.message };
     }
+    return { status: false, message: "An unexpected error occurred" };
+  }
 };
 
 export const registerStudent = async (studentData) => {
-    try {
-        const response = await secondaryApi.post(`/register-student`, studentData);
-        return response.data.data;
-    } catch (error) {
-        throw new Error('Failed to register student');
+  try {
+      const response = await secondaryApi.post(`/register-student`, studentData);
+      return response.data.data;
+  } catch (error) {
+    if (error.response && error.response.data) {
+      return { status: false, message: error.response.data.message };
     }
+    return { status: false, message: "An unexpected error occurred" };
+  }
+};
+
+export const fetchLocationData = async () => {
+  try {
+    const response = await common_service.get(`/allrecord`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching location data:', error);
+    return null;
+  }
 };

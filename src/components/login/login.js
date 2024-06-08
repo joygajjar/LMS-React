@@ -12,6 +12,7 @@ import {initialLoginData} from "../../components/constant/ComponentState";
 import  {useAuth}  from "../../auth/hooks/useAuth";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "../../redux/action";
+import { toast } from "react-toastify";
 
 
 export const LoginSec = () => {
@@ -40,11 +41,11 @@ const handleInputChange = (e) => {
     console.log("response login component", response);
     if (status) {
       console.log(status)
-      alert(message);
+      toast.success(message)
       // dispatch(loginSuccess(token));
       navigate("/registration");
     } else {
-      alert(message);
+      toast.error(message)
     }
   };
 

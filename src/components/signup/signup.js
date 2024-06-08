@@ -3,6 +3,7 @@ import { Container } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
+import Spinner from "react-bootstrap/Spinner";
 import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faLock, faPhone } from "@fortawesome/free-solid-svg-icons";
@@ -17,6 +18,8 @@ export const SignupSec = () => {
     password: "",
     confirmPassword: ""
   });
+  const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { signup } = useAuth();
 
@@ -26,10 +29,81 @@ export const SignupSec = () => {
       ...prevData,
       [name]: value,
     }));
+
+    // Validate inputs on change
+    validateInput(name, value);
+  };
+
+  const validateInput = (name, value) => {
+    let error = {};
+
+    switch (name) {
+      case "email":
+        if (!value) {
+          error[name] = "Email is required";
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+          error[name] = "Invalid email format";
+        }
+        break;
+      case "contact":
+        if (!value) {
+          error[name] = "Phone number is required";
+        } else if (!/^\d{10}$/.test(value)) {
+          error[name] = "Invalid phone number format";
+        }
+        break;
+      case "password":
+        if (!value) {
+          error[name] = "Password is required";
+        } else if (!/^[A-Z][a-z]{5,}(?=.*\d{3,})(?=.*[^a-zA-Z\d\s]).*$/.test(value)) {
+          error[name] = "Password must start with a capital letter, be at least 6 characters long, contain only lowercase letters after the first capital letter, have at least one symbol, and include at least 3 numbers";
+        }
+        break;
+      case "confirmPassword":
+        if (!value) {
+          error[name] = "Confirm Password is required";
+        } else if (value !== formData.password) {
+          error[name] = "Passwords do not match";
+        }
+        break;
+      default:
+        break;
+    }
+
+    // Update the errors state
+    setErrors((prevErrors) => {
+      // Remove the error for the input if the validation passes
+      if (!error[name]) {
+        const { [name]: removedError, ...rest } = prevErrors;
+        return rest;
+      }
+
+      // Otherwise, return the updated errors object
+      return {
+        ...prevErrors,
+        ...error,
+      };
+    });
   };
 
   const handleSubmit = async (evt) => {
     evt.preventDefault();
+
+    // Validate all fields before submitting
+    let hasErrors = false;
+    for (const key in formData) {
+      validateInput(key, formData[key]);
+      if (errors[key]) {
+        hasErrors = true;
+      }
+    }
+
+    // If there are errors, prevent form submission
+    if (hasErrors) {
+      return;
+    }
+
+    setLoading(true);
 
     // Remove any non-digit characters from the phone number
     let phoneNumber = formData.contact.replace(/\D/g, "");
@@ -46,17 +120,14 @@ export const SignupSec = () => {
 
     // Check if the contact number is a valid Indian mobile number
     if (!isValidIndianMobileNumber(phoneNumber.replace("+91", ""))) {
+      setLoading(false);
       // If not valid, show an alert using SweetAlert
-      Swal.fire({
-        icon: "error",
-        title: "Invalid Contact Number",
-        text: "Please enter a valid Indian mobile number.",
-      });
       return;
     }
 
     const response = await signup(updatedFormData);
     let { status, message } = response;
+    setLoading(false);
     console.log("response signup component", response);
     if (status) {
       toast.success(message);
@@ -64,7 +135,7 @@ export const SignupSec = () => {
         "/otp?email=" + formData.email + "&contact=" + phoneNumber
       );
     } else {
-      toast.error("Email Or Contact Already Exist");
+      toast.error(message);
     }
   };
 
@@ -82,7 +153,7 @@ export const SignupSec = () => {
           <p className="text-dark">Create an Account</p>
         </div>
         <div className="form-box text-start">
-          <Form onSubmit={(e) => handleSubmit(e, formData)}>
+          <Form onSubmit={handleSubmit}>
             <FloatingLabel controlId="floatingInput" label="Email ID" className="mb-3">
               <Form.Control
                 type="email"
@@ -90,9 +161,12 @@ export const SignupSec = () => {
                 value={formData.email}
                 onChange={handleInputChange}
                 placeholder="Enter Your Email Address"
-                required
+                isInvalid={!!errors.email}
               />
-              <FontAwesomeIcon icon={faEnvelope} />
+              <Form.Control.Feedback type="invalid">
+                {errors.email}
+              </Form.Control.Feedback>
+              {!errors.email && <FontAwesomeIcon icon={faEnvelope} />}
             </FloatingLabel>
             <FloatingLabel controlId="floatingInput" label="Phone No" className="mb-3">
               <Form.Control
@@ -101,9 +175,12 @@ export const SignupSec = () => {
                 value={formData.contact}
                 onChange={handleInputChange}
                 placeholder="Enter Your Mobile No"
-                required
+                isInvalid={!!errors.contact}
               />
-              <FontAwesomeIcon icon={faPhone} />
+              <Form.Control.Feedback type="invalid">
+                {errors.contact}
+              </Form.Control.Feedback>
+              {!errors.contact && <FontAwesomeIcon icon={faPhone} />}
             </FloatingLabel>
             <FloatingLabel controlId="floatingPassword" label="Password" className="mb-3">
               <Form.Control
@@ -113,9 +190,12 @@ export const SignupSec = () => {
                 value={formData.password}
                 onChange={handleInputChange}
                 placeholder="Enter Password"
-                required
+                isInvalid={!!errors.password}
               />
-              <FontAwesomeIcon icon={faLock} />
+              <Form.Control.Feedback type="invalid">
+                {errors.password}
+              </Form.Control.Feedback>
+              {!errors.password && <FontAwesomeIcon icon={faLock} />}
             </FloatingLabel>
             <FloatingLabel controlId="floatingPassword" label="Confirm Password" className="mb-3">
               <Form.Control
@@ -125,17 +205,30 @@ export const SignupSec = () => {
                 value={formData.confirmPassword}
                 onChange={handleInputChange}
                 placeholder="Enter Confirm Password"
-                required
+                isInvalid={!!errors.confirmPassword}
               />
-              <FontAwesomeIcon icon={faLock} />
+              <Form.Control.Feedback type="invalid">
+                {errors.confirmPassword}
+              </Form.Control.Feedback>
+              {!errors.confirmPassword && <FontAwesomeIcon icon={faLock} />}
             </FloatingLabel>
 
-            <Button variant="primary" type="submit">
-              <span>Signup</span>
+            <Button variant="primary" type="submit" disabled={loading || Object.keys(errors).length > 0}>
+              {loading ? (
+                <Spinner
+                  as="span"
+                  animation="border"
+                  size="sm"
+                  role="status"
+                  aria-hidden="true"
+                />
+              ) : (
+                <span>Signup</span>
+              )}
             </Button>
 
             <Form.Text className="w-100 d-inline-block text-center mt-3">
-              Already have an account ?{" "}
+              Already have an account?{" "}
               <Link to="/login" className="text-secondary text-decoration-none">
                 Login
               </Link>

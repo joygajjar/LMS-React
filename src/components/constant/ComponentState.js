@@ -37,21 +37,28 @@ export const initialRegistrationData={
 }
 
 export const initialStudentData = {
-        studentName: '',
-        fatherName: '',
-        gender: '',
-        pancardNo: '',
-        aadharNo: '',
-        dob: '',
-        category: '',
-        religion: '',
-        minority: false,
-        presentAddress: '',
-        permanentAddress: '',
-        pincode: '',
-        fatherContactNo: '',
-        fatherEmailId: '',
-        isLivingWithGuardians: false,
-    }
+    studentName: '',
+    fatherName: '',
+    gender: '',
+    pancardNo: '',
+    fullAadharNo: '',
+    dob: null,
+    category: {
+        id:'',
+        name:''
+    },
+    religion: '',
+    minority: false,
+    presentAddress: '',
+    permanentAddress: '',
+    pincode: '',
+    fatherContactNo: '',
+    fatherEmailId: '',
+    isLivingWithGuardians: false,
+    state:'',
+    district:'',
+    taluka:''
+}
+  
 
     

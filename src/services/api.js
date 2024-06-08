@@ -6,6 +6,7 @@ const baseURLs = {
     production: 'https://your-production-server.com/api/',
     development: 'http://localhost:9094/api/',
     secondary: 'http://localhost:9095/api/',
+    common_service: 'http://localhost:9096/api/',
 };
 
 // Create Axios instances for each base URL
@@ -18,6 +19,13 @@ const primaryApi = axios.create({
 
 const secondaryApi = axios.create({
     baseURL: baseURLs.secondary,
+    headers: {
+        'Content-Type': 'application/json',
+    },
+});
+
+const common_service = axios.create({
+    baseURL: baseURLs.common_service,
     headers: {
         'Content-Type': 'application/json',
     },
@@ -50,4 +58,4 @@ primaryApi.interceptors.response.use((response) => response, handleError);
 secondaryApi.interceptors.response.use((response) => response, handleError);
 
 // Export Axios instances
-export { primaryApi, secondaryApi };
+export { primaryApi, secondaryApi,common_service };

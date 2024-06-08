@@ -1,6 +1,6 @@
 
 import { useDispatch } from "react-redux";
-import { signup, sendOtp, resendOtp, login, forgotPassword, resetPassword, validateToken, registration, getAllHSCPassStates, getAllHSCBoards, getAllAddmissionTypes, getAllCategories, getAllReligions } from "../../services/authService";
+import { signup, sendOtp, resendOtp, login, forgotPassword, resetPassword, validateToken, registration, getAllHSCPassStates, getAllHSCBoards, getAllAddmissionTypes, getAllCategories, getAllReligions,registerStudent, fetchLocationData } from "../../services/authService";
 import { loginSuccess } from "../../redux/action";
 
 export const useAuth = () => {
@@ -130,30 +130,52 @@ export const useAuth = () => {
     }
   };
 
-  const handleGetAllReligions = async () => {
-    try {
-      const response = await getAllReligions();
-      console.log("response hook", response);
-      return response;
-    } catch (err) {
-      console.log("error", err);
-    }
-  };
-
-  const handleGetAllCategories = async () => {
-    try {
-      const response = await getAllCategories();
-      console.log("response hook", response);
-      return response;
-    } catch (err) {
-      console.log("error", err);
-    }
-  };
+const handleGetAllReligions = async () => {
+      try {
+        const response = await getAllReligions();
+        console.log("response hook", response);
+        return response;
+      } catch (err) {
+        console.log("error", err);
+      }
+    };
+ 
+    const handleGetAllCategories = async () => {
+      console.log("handleGetAllCategories");
+      try {
+        const response = await getAllCategories();
+        console.log("response hook", response);
+        return response;
+      } catch (err) {
+        console.log("error", err);
+      }
+    };
+ 
+    const handleRegistreStudent = async () => {
+            try {
+        const response = await registerStudent();
+        console.log("response hook", response);
+        return response;
+      } catch (err) {
+        console.log("error", err);
+      }
+    }; 
+    
+    const handleGetAllLocation= async () => {
+      console.log("handleGetAllCategories");
+      try {
+        const response = await fetchLocationData();
+        console.log("response hook", response);
+        return response;
+      } catch (err) {
+        console.log("error", err);
+      }
+    };
 
   return {
     signup: handleRegister, sendOtp: handleSendOtp, resendOtp: handleResendOTP, login: handleLogin, forgotPassword: handleForgotPassword, resetPassword: handleresetPassword, validateToken: handlevalidateToken, registration: handleRegisteration, getAllAddmissionTypes: handleGetAllAddmissionTypes,
     getAllHSCPassStates: handleGetAllHSCPassStates,
-    getAllHSCBoards: handleGetAllHSCBoards,getAllCategories: handleGetAllCategories,getAllReligions: handleGetAllReligions
+    getAllHSCBoards: handleGetAllHSCBoards,getAllCategories: handleGetAllCategories,getAllReligions: handleGetAllReligions,registerStudent:handleRegistreStudent, fetchLocationData:handleGetAllLocation
   }
 };
 
