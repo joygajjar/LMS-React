@@ -194,3 +194,16 @@ export const getAllInstitutes = async () => {
     return null;
   }
 };
+
+export const saveInstituteDetails = async (currentInstituteDetails) => {
+  try {
+      const response = await secondaryApi.post('/save-currentInstite-Details', currentInstituteDetails);
+      console.log("auth service response", response);
+      return response.data;
+  } catch (error) {
+      if (error.response && error.response.data) {
+        return { status: false, message: error.response.data.message };
+      }
+      return { status: false, message: "An unexpected error occurred" };
+  }
+}

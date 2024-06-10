@@ -20,13 +20,16 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useAuth } from "../../auth/hooks/useAuth";
-import { initialRegistrationData, initialStudentData } from "../../components/constant/ComponentState";
-import { getAllCategories, getAllReligions, registerStudent, fetchLocationData,getAllInstitutes } from '../../services/authService';
+import { initialRegistrationData, initialStudentData, initialCurrentInstituteDetailsData } from "../../components/constant/ComponentState";
+import { getAllCategories, getAllReligions, registerStudent, fetchLocationData, getAllInstitutes, saveInstituteDetails } from '../../services/authService';
 import { toast } from 'react-toastify';
 
 export const RegistrationSec = () => {
     const [formDetails, setFormDetails] = useState(initialRegistrationData);
     const [stuformDetails, setStuformDetails] = useState(initialStudentData);//for personInfo
+
+    const [currentInstituteDetails, setCurrentInstituteDetails] = useState(initialCurrentInstituteDetailsData);//for current institute deatils
+
     const { registration, getAllAddmissionTypes, getAllHSCPassStates, getAllHSCBoards } = useAuth();
 
 
@@ -137,41 +140,50 @@ export const RegistrationSec = () => {
 
 
     const handleProgramLevelChange = (event) => {
-        const programlevel = event.target.value;
-        setSelectedProgramLevel(programlevel);
+        const programLevel = event.target.value;
+        setSelectedProgramLevel(programLevel);
         setSelectedInstitute('');
         setFilteredProgram([]);
-        // setStuformDetails((prevDetails) => ({
-        //     ...prevDetails,
-        //     state: state,
-        //     district: '',
-        //     taluka: ''
-        // }));
+        setCurrentInstituteDetails((prevDetails) => ({
+            ...prevDetails,
+            programLevel: programLevel,
+            institute: '',
+            program: ''
+        }));
     };
 
     const handleInstituteChange = (event) => {
         const institute = event.target.value;
         setSelectedInstitute(institute);
         setFilteredProgram(Object.keys(institutes[selectedProgramLevel][institute] || {}));
-        // setStuformDetails((prevDetails) => ({
-        //     ...prevDetails,
-        //     district: district,
-        //     taluka: ''
-        // }));
+        setCurrentInstituteDetails((prevDetails) => ({
+            ...prevDetails,
+            institute: institute,
+            program: ''
+        }));
     };
 
     const handleProgramChange = (event) => {
         const program = event.target.value;
-        // setStuformDetails((prevDetails) => ({
-        //     ...prevDetails,
-        //     taluka: taluka
-        // }));
+        setCurrentInstituteDetails((prevDetails) => ({
+            ...prevDetails,
+            program: program
+        }));
     };
 
     const stuhandleChange = (e) => {
         const { name, value } = e.target
         console.log(value)
         setStuformDetails((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }))
+    };
+
+    const currentInsthandleChange = (e) => {
+        const { name, value } = e.target
+        console.log(value)
+        setCurrentInstituteDetails((prevData) => ({
             ...prevData,
             [name]: value,
         }))
@@ -220,21 +232,39 @@ export const RegistrationSec = () => {
                 state: stuformDetails.state,
                 district: stuformDetails.district,
                 taluka: stuformDetails.taluka,
-                // fatherContactNo: stuformDetails.fatherContactNo,
-                // fatherEmailId: stuformDetails.fatherEmailId,
-                // isLivingWithGuardians: false,
+                fatherContactNo: stuformDetails.fatherContactNo,
+                fatherEmailId: stuformDetails.fatherEmailId,
+                isLivingWithGuardians: false,
+                hscSchoolName: stuformDetails.hscSchoolName,
+                obtainedMarks: stuformDetails.obtainedMarks,
+                totalMarks: stuformDetails.totalMarks,
+                percentile: stuformDetails.percentile,
             }
 
             const response1 = await registerStudent(studata, token);
             console.log(response1);
+
+            let currentInstititeData = {
+                entrollmentNo: currentInstituteDetails.entrollmentNo,
+                programLevel: currentInstituteDetails.programLevel,
+                institute: currentInstituteDetails.institute,
+                program: currentInstituteDetails.program,
+            }
+
+            const response2 = await saveInstituteDetails(currentInstititeData);
+            console.log(response2);
+
+
+
             toast.success("Successfully Resistered")
             // Handle successful response
         } catch (error) {
+            toast.error(error.message)
             console.error('Failed to save basic details:', error.message);
             // Handle error response
         }
     };
-    const steps = ['Basic Board Details', 'Personal Info', 'HSC Details', 'Upload Documents','Current Institute Details'];
+    const steps = ['Basic Board Details', 'Personal Info', 'HSC Details', 'Upload Documents', 'Current Institute Details'];
 
 
     const handleNext = () => {
@@ -505,22 +535,22 @@ export const RegistrationSec = () => {
                                     <Row>
                                         <Col xs={12} md={12}>
                                             <FloatingLabel controlId="floatingInput" label="HSC School Name" className='mb-3'>
-                                                <Form.Control type="text" placeholder="Person Name" required />
+                                                <Form.Control type="text" placeholder="HSC School Name" name="hscSchoolName" value={stuformDetails.hscSchoolName} onChange={stuhandleChange} required />
                                             </FloatingLabel>
                                         </Col>
                                         <Col xs={12} md={4}>
                                             <FloatingLabel controlId="floatingInput" label="Obtained Marks" className='mb-3'>
-                                                <Form.Control type="text" placeholder="Person Name" required />
+                                                <Form.Control type="text" placeholder="Obtained Marks" name="obtainedMarks" value={stuformDetails.obtainedMarks} onChange={stuhandleChange} required />
                                             </FloatingLabel>
                                         </Col>
                                         <Col xs={12} md={4}>
                                             <FloatingLabel controlId="floatingInput" label="Total Marks" className='mb-3'>
-                                                <Form.Control type="text" placeholder="Person Name" required />
+                                                <Form.Control type="text" placeholder="Total Marks" name="totalMarks" value={stuformDetails.totalMarks} onChange={stuhandleChange} required />
                                             </FloatingLabel>
                                         </Col>
                                         <Col xs={12} md={4}>
                                             <FloatingLabel controlId="floatingInput" label="Percentile" className='mb-3'>
-                                                <Form.Control type="text" placeholder="Person Name" required />
+                                                <Form.Control type="text" placeholder="Percentile" name="percentile" value={stuformDetails.percentile} onChange={stuhandleChange} required />
                                             </FloatingLabel>
                                         </Col>
                                     </Row>
@@ -529,12 +559,13 @@ export const RegistrationSec = () => {
                                     <Row>
                                         <Col xs={12} md={6}>
                                             <FloatingLabel controlId="floatingInput" label="Father Mobile Number" className='mb-3'>
-                                                <Form.Control type="text" placeholder="Person Name" required />
+                                                <Form.Control type="text" placeholder="Father Mobile Number" name="fatherContactNo" value={stuformDetails.fatherContactNo} onChange={stuhandleChange} required />
                                             </FloatingLabel>
                                         </Col>
+
                                         <Col xs={12} md={6}>
                                             <FloatingLabel controlId="floatingInput" label="Father Email Address" className='mb-3'>
-                                                <Form.Control type="text" placeholder="Person Name" required />
+                                                <Form.Control type="text" placeholder="Father Email Address" name="fatherEmailId" value={stuformDetails.fatherEmailId} onChange={stuhandleChange} required />
                                             </FloatingLabel>
                                         </Col>
                                         <Col xs={12} md={12}>
@@ -553,9 +584,11 @@ export const RegistrationSec = () => {
                                                     <Form.Check
                                                         type="radio"
                                                         label="No"
-                                                        name="livingWithParents"
+                                                        name="isLivingWithGuardians"
                                                         id="livingWithParentsNo"
                                                         value="no"
+                                                        onChange={stuhandleChange}
+                                                        checked={stuformDetails.isLivingWithGuardians === false}
                                                     />
                                                 </div>
                                             </Form.Group>
@@ -580,12 +613,12 @@ export const RegistrationSec = () => {
                                 </React.Fragment>
                             )}
 
-                           {activeStep === 4 && (
+                            {activeStep === 4 && (
                                 <React.Fragment>
                                     {/* HSC Details Form Section */}
                                     <h3 className='text-primary border-bottom border-light'><FontAwesomeIcon icon={faAnglesRight} className='me-2' />HSC Details</h3>
                                     <Row>
-                                    <Col xs={12} md={6}>
+                                        <Col xs={12} md={6}>
                                             <FloatingLabel controlId="floatingSelect" label="Program Level" className='mb-3'>
                                                 <Form.Select value={selectedProgramLevel} onChange={handleProgramLevelChange}>
                                                     <option value="">Select Program Level</option>
@@ -607,7 +640,7 @@ export const RegistrationSec = () => {
                                         </Col>
                                         <Col xs={12} md={6}>
                                             <FloatingLabel controlId="floatingSelect" label="Program" className='mb-3'>
-                                                <Form.Select value={stuformDetails.taluka} onChange={handleProgramChange} disabled={!selectedInstitute}>
+                                                <Form.Select value={currentInstituteDetails.program} onChange={handleProgramChange} disabled={!selectedInstitute}>
                                                     <option value="">Select Program</option>
                                                     {filteredProgram.map(program => (
                                                         <option key={program} value={program}>{program.split('_')[1]}</option>
@@ -615,13 +648,14 @@ export const RegistrationSec = () => {
                                                 </Form.Select>
                                             </FloatingLabel>
                                         </Col>
+                                        <Col xs={12} md={6}>
+                                            <FloatingLabel controlId="floatingInput" label="Entrollment No" className='mb-3'>
+                                                <Form.Control type="text" placeholder="Entrollment No" name="entrollmentNo" value={currentInstituteDetails.entrollmentNo} onChange={currentInsthandleChange} required />
+                                            </FloatingLabel>
+                                        </Col>
                                     </Row>
-                                    </React.Fragment>
-                                   )}
-
-
-
-
+                                </React.Fragment>
+                            )}
                             <Row>
                                 <Col xs={12} md={12}>
                                     <div className='d-flex justify-content-center mt-2 pt-4 border-top'>

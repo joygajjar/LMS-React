@@ -57,8 +57,20 @@ export const initialStudentData = {
     isLivingWithGuardians: false,
     state:'',
     district:'',
-    taluka:''
+    taluka:'',
+    hscSchoolName:'',
+    obtainedMarks:'',
+    totalMarks:'',
+    percentile:'',
+
 }
   
-
+export const initialCurrentInstituteDetailsData={
+    entrollmentNo: '',
+    programLevel: '',
+    institute: '',
+    program: '',
+    
+    
+}
     

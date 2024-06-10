@@ -2,46 +2,7 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 
 const resources = {
-  en: {
-    translation: {
-
-      //signup.js
-
-      "Register": "Register",
-      "Create an Account": "Create an Account",
-      "Email ID": "Email ID",
-      "Phone No": "Phone No",
-      "Password": "Password",
-      "Confirm Password": "Confirm Password",
-      "Signup": "Signup",
-      "Already have an account?": "Already have an account?",
-      "Login": "Login",
-
-      //login.js
-
-      "Login": "Login",
-      "Logout":"Logout",
-      "Login yourself": "Login yourself",
-      "Email ID/Phone No/Government ID": "Email ID/Phone No/Government ID",
-      "Password": "Password",
-      "Remember Me": "Remember Me",
-      "Forgot Password?": "Forgot Password?",
-      "Signup here": "Signup here",
-      "Don't have an account?": "Don't have an account?",
-
-      //navbar.js
-
-      "Home": "Home",
-      "Circular": "Circular",
-      "Help": "Help",
-      "Contact": "Contact",
-      "Higher & Technical Education": "Higher & Technical Education",
-      "Education Department": "Education Department",
-      "Government of Uttar Pradesh": "Government of Uttar Pradesh",
-      "Copyright © 2024. All Rights Reserved": "Copyright © 2024. All Rights Reserved",
-
-    }
-  },
+ 
   hi: {
     translation: {
       
@@ -81,7 +42,18 @@ const resources = {
       "Government of Uttar Pradesh": "उत्तर प्रदेश सरकार",
       "Copyright © 2024. All Rights Reserved": "स्वत्व © 2024. सर्वाधिकार सुरक्षित",
       "Education Department": "शिक्षा विभाग",
-      "Government of Uttar Pradesh": "उत्तर प्रदेश सरकार"
+      "Government of Uttar Pradesh": "उत्तर प्रदेश सरकार",
+
+      //otp.js
+
+      "Verification": "सत्यापन",
+      "Verify Your Details": "अपना विवरण सत्यापित करें",
+      "We have sent OTP to your email ID": "हमने ओ.टी.पी आपके ईमेल आईडी पर भेज दिया है",
+      "We have sent OTP to your Mobile No": "हमने ओ.टी.पी आपके मोबाइल नंबर पर भेज दिया है",
+      "Resend OTP": "ओ.टी.पी पुनः भेजें",
+      "Verify": "सत्यापित करें",
+      "Already have an account?": "क्या आपका पहले से ही खाता है?",
+     
 
 
     }

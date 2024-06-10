@@ -14,6 +14,7 @@ import { useDispatch } from "react-redux";
 import { loginSuccess } from "../../redux/action";
 import { toast } from "react-toastify";
 import { useTranslation } from 'react-i18next';
+import successSound from "../assets/success.wav";
 
 export const LoginSec = () => {
   const { t, i18n } = useTranslation();
@@ -21,6 +22,11 @@ export const LoginSec = () => {
   const { login } = useAuth();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const playSuccessSound = () => {
+    const audio = new Audio(successSound);
+    audio.play();
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -35,6 +41,7 @@ export const LoginSec = () => {
     const response = await login(formdata);
     let { status, message, data } = response;
     if (status) {
+      playSuccessSound()
       toast.success(message);
       navigate("/registration");
     } else {

@@ -1,14 +1,17 @@
 
-import { useDispatch,useSelector } from "react-redux";
-import { signup, sendOtp, resendOtp, login, forgotPassword, 
-          resetPassword, validateToken, registration, getAllHSCPassStates, 
-          getAllHSCBoards, getAllAddmissionTypes, getAllCategories, getAllReligions,
-          registerStudent, fetchLocationData, getAllInstitutes } from "../../services/authService";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  signup, sendOtp, resendOtp, login, forgotPassword,
+  resetPassword, validateToken, registration, getAllHSCPassStates,
+  getAllHSCBoards, getAllAddmissionTypes, getAllCategories, getAllReligions,
+  registerStudent, fetchLocationData, getAllInstitutes,
+  saveInstituteDetails
+} from "../../services/authService";
 import { loginSuccess } from "../../redux/action";
 
 export const useAuth = () => {
-  const dispatch=useDispatch();
-  const {isAuthenticated} = useSelector((store) => store?.auth)
+  const dispatch = useDispatch();
+  const { isAuthenticated } = useSelector((store) => store?.auth)
 
   const handleRegister = async (data) => {
     try {
@@ -53,8 +56,8 @@ export const useAuth = () => {
           email: data.email
         }
       }
-      sessionStorage.setItem('LOGIN_SUCCESS',JSON.stringify(payload))
-     const  reducer = dispatch(loginSuccess(payload));
+      sessionStorage.setItem('LOGIN_SUCCESS', JSON.stringify(payload))
+      const reducer = dispatch(loginSuccess(payload));
       console.log(reducer)
       return response;
 
@@ -135,63 +138,73 @@ export const useAuth = () => {
     }
   };
 
-const handleGetAllReligions = async () => {
-      try {
-        const response = await getAllReligions();
-        console.log("response hook", response);
-        return response;
-      } catch (err) {
-        console.log("error", err);
-      }
-    };
- 
-    const handleGetAllCategories = async () => {
-      console.log("handleGetAllCategories");
-      try {
-        const response = await getAllCategories();
-        console.log("response hook", response);
-        return response;
-      } catch (err) {
-        console.log("error", err);
-      }
-    };
- 
-    const handleRegistreStudent = async () => {
-            try {
-        const response = await registerStudent();
-        console.log("response hook", response);
-        return response;
-      } catch (err) {
-        console.log("error", err);
-      }
-    }; 
-    
-    const handleGetAllLocation= async () => {
-      console.log("handleGetAllCategories");
-      try {
-        const response = await fetchLocationData();
-        console.log("response hook", response);
-        return response;
-      } catch (err) {
-        console.log("error", err);
-      }
-    };
+  const handleGetAllReligions = async () => {
+    try {
+      const response = await getAllReligions();
+      console.log("response hook", response);
+      return response;
+    } catch (err) {
+      console.log("error", err);
+    }
+  };
 
-    const handleGetAllInstitute= async () => {
-      console.log("handleGetAllCategories");
-      try {
-        const response = await getAllInstitutes();
-        console.log("response hook", response);
-        return response;
-      } catch (err) {
-        console.log("error", err);
-      }
-    };
+  const handleGetAllCategories = async () => {
+    console.log("handleGetAllCategories");
+    try {
+      const response = await getAllCategories();
+      console.log("response hook", response);
+      return response;
+    } catch (err) {
+      console.log("error", err);
+    }
+  };
+
+  const handleRegistreStudent = async () => {
+    try {
+      const response = await registerStudent();
+      console.log("response hook", response);
+      return response;
+    } catch (err) {
+      console.log("error", err);
+    }
+  };
+
+  const handleGetAllLocation = async () => {
+    console.log("handleGetAllCategories");
+    try {
+      const response = await fetchLocationData();
+      console.log("response hook", response);
+      return response;
+    } catch (err) {
+      console.log("error", err);
+    }
+  };
+
+  const handleGetAllInstitute = async () => {
+    console.log("handleGetAllCategories");
+    try {
+      const response = await getAllInstitutes();
+      console.log("response hook", response);
+      return response;
+    } catch (err) {
+      console.log("error", err);
+    }
+  };
+
+  const handleCurrentInstituteDetails = async () => {
+    try {
+      const response = await saveInstituteDetails();
+      console.log("response hook", response);
+      return response;
+    } catch (err) {
+      console.log("error", err);
+    }
+  };
 
   return {
     signup: handleRegister, sendOtp: handleSendOtp, resendOtp: handleResendOTP, login: handleLogin, forgotPassword: handleForgotPassword, resetPassword: handleresetPassword, validateToken: handlevalidateToken, registration: handleRegisteration, getAllAddmissionTypes: handleGetAllAddmissionTypes,
     getAllHSCPassStates: handleGetAllHSCPassStates,
-    getAllHSCBoards: handleGetAllHSCBoards,getAllCategories: handleGetAllCategories,getAllReligions: handleGetAllReligions,registerStudent:handleRegistreStudent, fetchLocationData:handleGetAllLocation,getAllInstitutes:handleGetAllInstitute,isAuthenticated
+    getAllHSCBoards: handleGetAllHSCBoards, getAllCategories: handleGetAllCategories, getAllReligions: handleGetAllReligions, registerStudent: handleRegistreStudent, fetchLocationData: handleGetAllLocation, getAllInstitutes: handleGetAllInstitute, saveInstituteDetails :handleCurrentInstituteDetails, isAuthenticated
   }
 };
 
