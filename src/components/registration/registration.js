@@ -21,7 +21,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useAuth } from "../../auth/hooks/useAuth";
 import { initialRegistrationData, initialStudentData } from "../../components/constant/ComponentState";
-import { getAllCategories, getAllReligions, registerStudent, fetchLocationData } from '../../services/authService';
+import { getAllCategories, getAllReligions, registerStudent, fetchLocationData,getAllInstitutes } from '../../services/authService';
 import { toast } from 'react-toastify';
 
 export const RegistrationSec = () => {
@@ -38,11 +38,17 @@ export const RegistrationSec = () => {
     console.log(categories);
     const [religions, setReligions] = useState([]);
 
+    //LOCATION DEATILS
     const [locations, setLocations] = useState({});
     const [selectedState, setSelectedState] = useState('');
     const [selectedDistrict, setSelectedDistrict] = useState('');
     const [filteredTalukas, setFilteredTalukas] = useState([]);
 
+    //INSTITUTE DETAILS
+    const [institutes, setInstitutes] = useState({});
+    const [selectedProgramLevel, setSelectedProgramLevel] = useState('');
+    const [selectedInstitute, setSelectedInstitute] = useState('');
+    const [filteredProgram, setFilteredProgram] = useState([]);
 
     const [activeStep, setActiveStep] = useState(0);
 
@@ -78,6 +84,9 @@ export const RegistrationSec = () => {
                 const locationData = await fetchLocationData();
                 setLocations(locationData);
 
+                const instituteData = await getAllInstitutes();
+                setInstitutes(instituteData);
+
             } catch (error) {
                 console.error('Failed to fetch dropdown data:', error);
             }
@@ -93,38 +102,71 @@ export const RegistrationSec = () => {
             [name]: value,
         }))
     };
-    
+
     const handleStateChange = (event) => {
         const state = event.target.value;
         setSelectedState(state);
         setSelectedDistrict('');
         setFilteredTalukas([]);
         setStuformDetails((prevDetails) => ({
-          ...prevDetails,
-          state: state,
-          district: '',
-          taluka: ''
+            ...prevDetails,
+            state: state,
+            district: '',
+            taluka: ''
         }));
-      };
-    
-      const handleDistrictChange = (event) => {
+    };
+
+    const handleDistrictChange = (event) => {
         const district = event.target.value;
         setSelectedDistrict(district);
         setFilteredTalukas(Object.keys(locations[selectedState][district] || {}));
         setStuformDetails((prevDetails) => ({
-          ...prevDetails,
-          district: district,
-          taluka: ''
+            ...prevDetails,
+            district: district,
+            taluka: ''
         }));
-      };
-    
-      const handleTalukaChange = (event) => {
+    };
+
+    const handleTalukaChange = (event) => {
         const taluka = event.target.value;
         setStuformDetails((prevDetails) => ({
-          ...prevDetails,
-          taluka: taluka
+            ...prevDetails,
+            taluka: taluka
         }));
-      };
+    };
+
+
+    const handleProgramLevelChange = (event) => {
+        const programlevel = event.target.value;
+        setSelectedProgramLevel(programlevel);
+        setSelectedInstitute('');
+        setFilteredProgram([]);
+        // setStuformDetails((prevDetails) => ({
+        //     ...prevDetails,
+        //     state: state,
+        //     district: '',
+        //     taluka: ''
+        // }));
+    };
+
+    const handleInstituteChange = (event) => {
+        const institute = event.target.value;
+        setSelectedInstitute(institute);
+        setFilteredProgram(Object.keys(institutes[selectedProgramLevel][institute] || {}));
+        // setStuformDetails((prevDetails) => ({
+        //     ...prevDetails,
+        //     district: district,
+        //     taluka: ''
+        // }));
+    };
+
+    const handleProgramChange = (event) => {
+        const program = event.target.value;
+        // setStuformDetails((prevDetails) => ({
+        //     ...prevDetails,
+        //     taluka: taluka
+        // }));
+    };
 
     const stuhandleChange = (e) => {
         const { name, value } = e.target
@@ -175,9 +217,9 @@ export const RegistrationSec = () => {
                 presentAddress: stuformDetails.presentAddress,
                 permanentAddress: stuformDetails.permanentAddress,
                 pincode: stuformDetails.pincode,
-                state:stuformDetails.state,
-                district:stuformDetails.district,
-                taluka:stuformDetails.taluka,
+                state: stuformDetails.state,
+                district: stuformDetails.district,
+                taluka: stuformDetails.taluka,
                 // fatherContactNo: stuformDetails.fatherContactNo,
                 // fatherEmailId: stuformDetails.fatherEmailId,
                 // isLivingWithGuardians: false,
@@ -192,7 +234,7 @@ export const RegistrationSec = () => {
             // Handle error response
         }
     };
-    const steps = ['Basic Board Details', 'Personal Info', 'HSC Details', 'Upload Documents'];
+    const steps = ['Basic Board Details', 'Personal Info', 'HSC Details', 'Upload Documents','Current Institute Details'];
 
 
     const handleNext = () => {
@@ -414,35 +456,35 @@ export const RegistrationSec = () => {
                                             </FloatingLabel>
                                         </Col>
                                         <Col xs={12} md={6}>
-        <FloatingLabel controlId="floatingSelect" label="State" className='mb-3'>
-          <Form.Select value={selectedState} onChange={handleStateChange}>
-            <option value="">Select State</option>
-            {Object.keys(locations).map(state => (
-              <option key={state} value={state}>{state.split('_')[1]}</option>
-            ))}
-          </Form.Select>
-        </FloatingLabel>
-      </Col>
-      <Col xs={12} md={6}>
-        <FloatingLabel controlId="floatingSelect" label="District" className='mb-3'>
-          <Form.Select value={selectedDistrict} onChange={handleDistrictChange} disabled={!selectedState}>
-            <option value="">Select District</option>
-            {Object.keys(locations[selectedState] || {}).map(district => (
-              <option key={district} value={district}>{district.split('_')[1]}</option>
-            ))}
-          </Form.Select>
-        </FloatingLabel>
-      </Col>
-      <Col xs={12} md={6}>
-        <FloatingLabel controlId="floatingSelect" label="Taluka" className='mb-3'>
-          <Form.Select value={stuformDetails.taluka} onChange={handleTalukaChange} disabled={!selectedDistrict}>
-            <option value="">Select Taluka</option>
-            {filteredTalukas.map(taluka => (
-              <option key={taluka} value={taluka}>{taluka.split('_')[1]}</option>
-            ))}
-          </Form.Select>
-        </FloatingLabel>
-      </Col>
+                                            <FloatingLabel controlId="floatingSelect" label="State" className='mb-3'>
+                                                <Form.Select value={selectedState} onChange={handleStateChange}>
+                                                    <option value="">Select State</option>
+                                                    {Object.keys(locations).map(state => (
+                                                        <option key={state} value={state}>{state.split('_')[1]}</option>
+                                                    ))}
+                                                </Form.Select>
+                                            </FloatingLabel>
+                                        </Col>
+                                        <Col xs={12} md={6}>
+                                            <FloatingLabel controlId="floatingSelect" label="District" className='mb-3'>
+                                                <Form.Select value={selectedDistrict} onChange={handleDistrictChange} disabled={!selectedState}>
+                                                    <option value="">Select District</option>
+                                                    {Object.keys(locations[selectedState] || {}).map(district => (
+                                                        <option key={district} value={district}>{district.split('_')[1]}</option>
+                                                    ))}
+                                                </Form.Select>
+                                            </FloatingLabel>
+                                        </Col>
+                                        <Col xs={12} md={6}>
+                                            <FloatingLabel controlId="floatingSelect" label="Taluka" className='mb-3'>
+                                                <Form.Select value={stuformDetails.taluka} onChange={handleTalukaChange} disabled={!selectedDistrict}>
+                                                    <option value="">Select Taluka</option>
+                                                    {filteredTalukas.map(taluka => (
+                                                        <option key={taluka} value={taluka}>{taluka.split('_')[1]}</option>
+                                                    ))}
+                                                </Form.Select>
+                                            </FloatingLabel>
+                                        </Col>
                                         <Col xs={12} md={6}>
                                             <FloatingLabel controlId="floatingInput" label="Pincode" className='mb-3'>
                                                 <Form.Control type="text" placeholder="Person Name" name="pincode" value={stuformDetails.pincode} onChange={stuhandleChange} required />
@@ -537,6 +579,49 @@ export const RegistrationSec = () => {
                                     </Row>
                                 </React.Fragment>
                             )}
+
+                           {activeStep === 4 && (
+                                <React.Fragment>
+                                    {/* HSC Details Form Section */}
+                                    <h3 className='text-primary border-bottom border-light'><FontAwesomeIcon icon={faAnglesRight} className='me-2' />HSC Details</h3>
+                                    <Row>
+                                    <Col xs={12} md={6}>
+                                            <FloatingLabel controlId="floatingSelect" label="Program Level" className='mb-3'>
+                                                <Form.Select value={selectedProgramLevel} onChange={handleProgramLevelChange}>
+                                                    <option value="">Select Program Level</option>
+                                                    {Object.keys(institutes).map(programlevel => (
+                                                        <option key={programlevel} value={programlevel}>{programlevel.split('_')[1]}</option>
+                                                    ))}
+                                                </Form.Select>
+                                            </FloatingLabel>
+                                        </Col>
+                                        <Col xs={12} md={6}>
+                                            <FloatingLabel controlId="floatingSelect" label="Institutes" className='mb-3'>
+                                                <Form.Select value={selectedInstitute} onChange={handleInstituteChange} disabled={!selectedProgramLevel}>
+                                                    <option value="">Select Institutes</option>
+                                                    {Object.keys(institutes[selectedProgramLevel] || {}).map(institute => (
+                                                        <option key={institute} value={institute}>{institute.split('_')[1]}</option>
+                                                    ))}
+                                                </Form.Select>
+                                            </FloatingLabel>
+                                        </Col>
+                                        <Col xs={12} md={6}>
+                                            <FloatingLabel controlId="floatingSelect" label="Program" className='mb-3'>
+                                                <Form.Select value={stuformDetails.taluka} onChange={handleProgramChange} disabled={!selectedInstitute}>
+                                                    <option value="">Select Program</option>
+                                                    {filteredProgram.map(program => (
+                                                        <option key={program} value={program}>{program.split('_')[1]}</option>
+                                                    ))}
+                                                </Form.Select>
+                                            </FloatingLabel>
+                                        </Col>
+                                    </Row>
+                                    </React.Fragment>
+                                   )}
+
+
+
+
                             <Row>
                                 <Col xs={12} md={12}>
                                     <div className='d-flex justify-content-center mt-2 pt-4 border-top'>

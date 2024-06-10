@@ -1,10 +1,15 @@
 
-import { useDispatch } from "react-redux";
-import { signup, sendOtp, resendOtp, login, forgotPassword, resetPassword, validateToken, registration, getAllHSCPassStates, getAllHSCBoards, getAllAddmissionTypes, getAllCategories, getAllReligions,registerStudent, fetchLocationData } from "../../services/authService";
+import { useDispatch,useSelector } from "react-redux";
+import { signup, sendOtp, resendOtp, login, forgotPassword, 
+          resetPassword, validateToken, registration, getAllHSCPassStates, 
+          getAllHSCBoards, getAllAddmissionTypes, getAllCategories, getAllReligions,
+          registerStudent, fetchLocationData, getAllInstitutes } from "../../services/authService";
 import { loginSuccess } from "../../redux/action";
 
 export const useAuth = () => {
   const dispatch=useDispatch();
+  const {isAuthenticated} = useSelector((store) => store?.auth)
+
   const handleRegister = async (data) => {
     try {
       const response = await signup(data); // try catch
@@ -172,10 +177,21 @@ const handleGetAllReligions = async () => {
       }
     };
 
+    const handleGetAllInstitute= async () => {
+      console.log("handleGetAllCategories");
+      try {
+        const response = await getAllInstitutes();
+        console.log("response hook", response);
+        return response;
+      } catch (err) {
+        console.log("error", err);
+      }
+    };
+
   return {
     signup: handleRegister, sendOtp: handleSendOtp, resendOtp: handleResendOTP, login: handleLogin, forgotPassword: handleForgotPassword, resetPassword: handleresetPassword, validateToken: handlevalidateToken, registration: handleRegisteration, getAllAddmissionTypes: handleGetAllAddmissionTypes,
     getAllHSCPassStates: handleGetAllHSCPassStates,
-    getAllHSCBoards: handleGetAllHSCBoards,getAllCategories: handleGetAllCategories,getAllReligions: handleGetAllReligions,registerStudent:handleRegistreStudent, fetchLocationData:handleGetAllLocation
+    getAllHSCBoards: handleGetAllHSCBoards,getAllCategories: handleGetAllCategories,getAllReligions: handleGetAllReligions,registerStudent:handleRegistreStudent, fetchLocationData:handleGetAllLocation,getAllInstitutes:handleGetAllInstitute,isAuthenticated
   }
 };
 

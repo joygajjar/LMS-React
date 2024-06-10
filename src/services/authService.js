@@ -184,3 +184,13 @@ export const fetchLocationData = async () => {
     return null;
   }
 };
+
+export const getAllInstitutes = async () => {
+  try {
+    const response = await common_service.get(`/allInstituteRecord`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching institutes data:', error);
+    return null;
+  }
+};
