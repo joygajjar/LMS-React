@@ -166,7 +166,7 @@ export const getAllCategories = async () => {
 export const registerStudent = async (studentData) => {
   try {
       const response = await secondaryApi.post(`/register-student`, studentData);
-      return response.data.data;
+      return response.data;
   } catch (error) {
     if (error.response && error.response.data) {
       return { status: false, message: error.response.data.message };
@@ -207,3 +207,23 @@ export const saveInstituteDetails = async (currentInstituteDetails) => {
       return { status: false, message: "An unexpected error occurred" };
   }
 }
+
+export const uploadFile = async (file) => {
+  try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await secondaryApi.post('/uploadFile', formData, {
+          headers: {
+              'Content-Type': 'multipart/form-data'
+          }
+      });
+
+      return response.data;
+  } catch (error) {
+      if (error.response && error.response.data) {
+          return { status: false, message: error.response.data.message };
+      }
+      return { status: false, message: "An unexpected error occurred" };
+  }
+};

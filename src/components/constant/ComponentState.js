@@ -42,7 +42,7 @@ export const initialStudentData = {
     gender: '',
     pancardNo: '',
     fullAadharNo: '',
-    dob: null,
+    dob:'' ,
     category: {
         id:'',
         name:''

@@ -5,7 +5,7 @@ import {
   resetPassword, validateToken, registration, getAllHSCPassStates,
   getAllHSCBoards, getAllAddmissionTypes, getAllCategories, getAllReligions,
   registerStudent, fetchLocationData, getAllInstitutes,
-  saveInstituteDetails
+  saveInstituteDetails,uploadFile
 } from "../../services/authService";
 import { loginSuccess } from "../../redux/action";
 
@@ -201,10 +201,20 @@ export const useAuth = () => {
     }
   };
 
+  const handleUploadFile = async (file) => {
+    try {
+        const response = await uploadFile(file);
+        console.log("response hook", response);
+        return response;
+    } catch (err) {
+        console.log("error", err);
+    }
+};
+
   return {
     signup: handleRegister, sendOtp: handleSendOtp, resendOtp: handleResendOTP, login: handleLogin, forgotPassword: handleForgotPassword, resetPassword: handleresetPassword, validateToken: handlevalidateToken, registration: handleRegisteration, getAllAddmissionTypes: handleGetAllAddmissionTypes,
     getAllHSCPassStates: handleGetAllHSCPassStates,
-    getAllHSCBoards: handleGetAllHSCBoards, getAllCategories: handleGetAllCategories, getAllReligions: handleGetAllReligions, registerStudent: handleRegistreStudent, fetchLocationData: handleGetAllLocation, getAllInstitutes: handleGetAllInstitute, saveInstituteDetails :handleCurrentInstituteDetails, isAuthenticated
+    getAllHSCBoards: handleGetAllHSCBoards, getAllCategories: handleGetAllCategories, getAllReligions: handleGetAllReligions, registerStudent: handleRegistreStudent, fetchLocationData: handleGetAllLocation, getAllInstitutes: handleGetAllInstitute, saveInstituteDetails :handleCurrentInstituteDetails,uploadFile:handleUploadFile, isAuthenticated
   }
 };
 

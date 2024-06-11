@@ -15,6 +15,7 @@ import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import ProgressBar from 'react-bootstrap/ProgressBar'; // Import ProgressBar
+import { useForm, Controller } from 'react-hook-form';
 
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -23,6 +24,7 @@ import { useAuth } from "../../auth/hooks/useAuth";
 import { initialRegistrationData, initialStudentData, initialCurrentInstituteDetailsData } from "../../components/constant/ComponentState";
 import { getAllCategories, getAllReligions, registerStudent, fetchLocationData, getAllInstitutes, saveInstituteDetails } from '../../services/authService';
 import { toast } from 'react-toastify';
+import dayjs from 'dayjs';
 
 export const RegistrationSec = () => {
     const [formDetails, setFormDetails] = useState(initialRegistrationData);
@@ -53,6 +55,9 @@ export const RegistrationSec = () => {
     const [selectedInstitute, setSelectedInstitute] = useState('');
     const [filteredProgram, setFilteredProgram] = useState([]);
 
+    const { uploadFile } = useAuth(); // Destructure the uploadFile function from the useAuth hook
+    const [selectedFile, setSelectedFile] = useState(null);
+
     const [activeStep, setActiveStep] = useState(0);
 
     const token = useSelector(state => state.auth.token);
@@ -62,6 +67,21 @@ export const RegistrationSec = () => {
     for (let year = 1947; year <= 2100; year++) {
         years.push(year);
     }
+
+    const months = [
+        { value: "January", label: "Jan" },
+        { value: "February", label: "Feb" },
+        { value: "March", label: "Mar" },
+        { value: "April", label: "Apr" },
+        { value: "May", label: "May" },
+        { value: "June", label: "Jun" },
+        { value: "July", label: "Jul" },
+        { value: "August", label: "Aug" },
+        { value: "September", label: "Sep" },
+        { value: "October", label: "Oct" },
+        { value: "November", label: "Nov" },
+        { value: "December", label: "Dec" }
+    ];
 
     useEffect(() => {
         const fetchData = async () => {
@@ -171,13 +191,15 @@ export const RegistrationSec = () => {
         }));
     };
 
-    const stuhandleChange = (e) => {
-        const { name, value } = e.target
-        console.log(value)
-        setStuformDetails((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }))
+    const stuhandleChange = (event) => {
+        const { name, value } = event.target;
+        let updatedValue = value;
+    
+        if (name === 'isLivingWithGuardians') {
+            updatedValue = value === 'yes'; // Convert 'yes' to true and 'no' to false
+        }
+    
+        setStuformDetails((prevState) => ({ ...prevState, [name]: updatedValue }));
     };
 
     const currentInsthandleChange = (e) => {
@@ -189,10 +211,42 @@ export const RegistrationSec = () => {
         }))
     };
 
-    const handleSubmit = async (event) => {
+    const handleFileChange = (event) => {
+        setSelectedFile(event.target.files[0]);
+    };
+
+    const handleFileUpload = async () => {
+        if (!selectedFile) {
+            toast.error('No file selected.');
+            return;
+        }
+    
+        if (selectedFile.size > 1 * 1024 * 1024) {
+            toast.error('File size exceeds 2MB limit.');
+            return;
+        }
+    
+        try {
+            const response = await uploadFile(selectedFile); // Call the uploadFile function with the selected file
+            
+            if (response.status) {
+                toast.success(response.data + ' ' + response.message);
+                console.log('File upload response:', response);
+                
+            } else {
+                toast.error(response.message);
+                console.error('Error uploading file:', response.message);
+            }
+        } catch (error) {
+            toast.error(error);
+            console.error('Error uploading file:', error);
+            // Handle error (e.g., show an error message to the user)
+        }
+    };
+
+    const handleRegistrationFormSubmit = async (event, formDetails, token) => {
         event.preventDefault();
         try {
-            console.log(formDetails)
             let formdata = {
                 name: formDetails.basicBoardDetailsName,
                 hscSeatNo: formDetails.hscSeatNo,
@@ -208,10 +262,22 @@ export const RegistrationSec = () => {
                     id: formDetails.hscBoard
                 }
             }
-
             const response = await registration(formdata, token);
-            console.log(response);
+            
+            if (response.status) {
+                toast.success(response.message);
+            } else {
+                toast.error(response.message);
+            }
+        } catch (error) {
+            toast.error(error.message);
+            console.error('Failed to save basic details:', error.message);
+        }
+    };
 
+    const handleStudentDetailsSubmit = async (event, stuformDetails, token) => {
+        event.preventDefault();
+        try {
             let studata = {
                 studentName: stuformDetails.studentName,
                 fatherName: stuformDetails.fatherName,
@@ -225,7 +291,7 @@ export const RegistrationSec = () => {
                 religion: {
                     id: stuformDetails.religion
                 },
-                minority: false,
+                minority: stuformDetails.minority,
                 presentAddress: stuformDetails.presentAddress,
                 permanentAddress: stuformDetails.permanentAddress,
                 pincode: stuformDetails.pincode,
@@ -234,40 +300,61 @@ export const RegistrationSec = () => {
                 taluka: stuformDetails.taluka,
                 fatherContactNo: stuformDetails.fatherContactNo,
                 fatherEmailId: stuformDetails.fatherEmailId,
-                isLivingWithGuardians: false,
+                isLivingWithGuardians: stuformDetails.isLivingWithGuardians,
                 hscSchoolName: stuformDetails.hscSchoolName,
                 obtainedMarks: stuformDetails.obtainedMarks,
                 totalMarks: stuformDetails.totalMarks,
                 percentile: stuformDetails.percentile,
             }
+    
+            const response = await registerStudent(studata, token);
+            console.log(response);
 
-            const response1 = await registerStudent(studata, token);
-            console.log(response1);
+            if (response.status) {
+                toast.success(response.message);
+            } else {
+                toast.error(response.message);
+            }
+        } catch (error) {
+            toast.error(error.message);
+            console.error('Failed to save student details:', error.message);
+        }
+    };
 
+    const handleInstituteDetailsSubmit = async (event, currentInstituteDetails) => {
+        event.preventDefault();
+        try {
             let currentInstititeData = {
                 entrollmentNo: currentInstituteDetails.entrollmentNo,
                 programLevel: currentInstituteDetails.programLevel,
                 institute: currentInstituteDetails.institute,
                 program: currentInstituteDetails.program,
             }
-
-            const response2 = await saveInstituteDetails(currentInstititeData);
-            console.log(response2);
-
-
-
-            toast.success("Successfully Resistered")
-            // Handle successful response
+    
+            const response = await saveInstituteDetails(currentInstititeData);
+            console.log(response);
+            toast.success("Successfully Saved Institute Details");
         } catch (error) {
-            toast.error(error.message)
-            console.error('Failed to save basic details:', error.message);
-            // Handle error response
+            toast.error(error.message);
+            console.error('Failed to save institute details:', error.message);
         }
     };
-    const steps = ['Basic Board Details', 'Personal Info', 'HSC Details', 'Upload Documents', 'Current Institute Details'];
+    
+    const handleSubmitFunctions = [
+        handleRegistrationFormSubmit,
+        handleStudentDetailsSubmit,
+        // null,
+        // handleInstituteDetailsSubmit,
+        // // Add more handleSubmit functions for each step as needed
+    ];
 
+    const steps = ['Basic Board Details', 'Student Info', 'Upload Documents', 'Current Institute Details'];
 
-    const handleNext = () => {
+    const handleNext = async (event) => {
+        event.preventDefault();
+        if (activeStep < handleSubmitFunctions.length) {
+            await handleSubmitFunctions[activeStep](event, activeStep === 0 ? formDetails : activeStep === 1 ? stuformDetails : currentInstituteDetails, token);
+        }
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
     };
 
@@ -276,6 +363,7 @@ export const RegistrationSec = () => {
     };
 
     const formFilledPercentage = ((activeStep + 1) / steps.length) * 100;
+    
 
     return (
         <React.Fragment>
@@ -295,7 +383,7 @@ export const RegistrationSec = () => {
                 </Stepper>
 
                 <div className="registration-box text-start">
-                    <Form onSubmit={(e) => handleSubmit(e, formDetails)}>
+                       <Form onSubmit={(e) => handleNext(e)}>
                         <div>
                             {activeStep === 0 && (
                                 <React.Fragment>
@@ -338,7 +426,7 @@ export const RegistrationSec = () => {
                                                     name="examYear"
                                                     value={formDetails.examYear}
                                                     onChange={handleChange}
-                                                    required                                                 >
+                                                    required >
                                                     <option value="">Select Exam Year</option>
                                                     {years.map((year) => (
                                                         <option key={year} value={year}>{year}</option>
@@ -346,16 +434,19 @@ export const RegistrationSec = () => {
                                                 </Form.Select>
                                             </FloatingLabel>
                                         </Col>
+
                                         <Col xs={12} md={12} lg={3}>
-                                            <FloatingLabel controlId="floatingInput" label="Exam Month" className="mb-3">
-                                                <Form.Control
-                                                    type="text"
+                                            <FloatingLabel controlId="floatingSelect" label="Exam Month" className="mb-3">
+                                                <Form.Select
                                                     name="examMonth"
                                                     value={formDetails.examMonth}
-                                                    placeholder="Enter Exam Month"
                                                     onChange={handleChange}
-                                                    required
-                                                />
+                                                    required >               
+                                                    <option value="">Select Exam Month</option>
+                                                    {months.map((month) => (
+                                                    <option key={month.value} value={month.value}>{month.label}</option>
+                                                            ))}
+                                                </Form.Select>
                                             </FloatingLabel>
                                         </Col>
                                         <Col xs={12} md={12} lg={3}>
@@ -426,10 +517,12 @@ export const RegistrationSec = () => {
                                             <FloatingLabel controlId="dob" label="Date Of Birth" className='mb-3'>
                                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                                     <DatePicker
-                                                        value={stuformDetails.dob}
+                                                         value={dayjs(stuformDetails.dob)}
                                                         onChange={(date) => {
-                                                            stuhandleChange({ target: { name: 'dob', value: date } });
-                                                        }}
+                                                            console.log(date)
+                                                            const formattedDate = dayjs(date).format('YYYY-MM-DD');
+                                                            stuhandleChange({ target: { name: 'dob', value: formattedDate } });
+                                                          }}
                                                         renderInput={(params) => <Form.Control {...params} type="date" required />}
                                                     />
                                                 </LocalizationProvider>
@@ -526,11 +619,6 @@ export const RegistrationSec = () => {
                                             </FloatingLabel>
                                         </Col>
                                     </Row>
-                                </React.Fragment>
-                            )}
-                            {activeStep === 2 && (
-                                <React.Fragment>
-                                    {/* HSC Details Form Section */}
                                     <h3 className='text-primary border-bottom border-light'><FontAwesomeIcon icon={faAnglesRight} className='me-2' />HSC Details</h3>
                                     <Row>
                                         <Col xs={12} md={12}>
@@ -575,7 +663,7 @@ export const RegistrationSec = () => {
                                                     <Form.Check
                                                         type="radio"
                                                         label="Yes"
-                                                        name="livingWithParents"
+                                                        name="isLivingWithGuardians"
                                                         id="livingWithParentsYes"
                                                         value="yes"
                                                         onChange={stuhandleChange}
@@ -592,12 +680,12 @@ export const RegistrationSec = () => {
                                                     />
                                                 </div>
                                             </Form.Group>
+
                                         </Col>
                                     </Row>
-
                                 </React.Fragment>
                             )}
-                            {activeStep === 3 && (
+                            {activeStep === 2 && (
                                 <React.Fragment>
                                     {/* HSC Details Form Section */}
                                     <h3 className='text-primary border-bottom border-light'><FontAwesomeIcon icon={faAnglesRight} className='me-2' />Upload Documents</h3>
@@ -605,15 +693,17 @@ export const RegistrationSec = () => {
                                         <Col xs={12} md={12}>
                                             <Form.Group controlId="formFile" className="mb-3">
                                                 <Form.Label>Upload Photo</Form.Label>
-                                                <Form.Control type="file" className='choose-photo' />
+                                                <Form.Control type="file" className='choose-photo'  onChange={handleFileChange} />
+                       
                                                 <p className='info'>Notes : Upload Scanned Copy of Photo (File size must not exceed 02 mb) </p>
                                             </Form.Group>
                                         </Col>
                                     </Row>
+                                    <Button variant="primary" onClick={handleFileUpload}>Upload</Button>
                                 </React.Fragment>
                             )}
 
-                            {activeStep === 4 && (
+                            {activeStep === 3 && (
                                 <React.Fragment>
                                     {/* HSC Details Form Section */}
                                     <h3 className='text-primary border-bottom border-light'><FontAwesomeIcon icon={faAnglesRight} className='me-2' />HSC Details</h3>
@@ -665,13 +755,11 @@ export const RegistrationSec = () => {
                                             </Button>
                                         )}
                                         {activeStep !== steps.length - 1 ? (
-                                            <Button variant="primary" onClick={handleNext} className='mx-1'>
-                                                Next
-                                            </Button>
+                                            <Button variant="primary" type="submit">Next</Button>
                                         ) : (
-                                            <Button variant="primary" type="submit" className='mx-1'>
-                                                Submit
-                                            </Button>
+                                            <Button variant="primary" type="submit" onClick={(e) => handleInstituteDetailsSubmit(e, currentInstituteDetails)}>
+                                    Submit
+                                </Button>
                                         )}
                                     </div>
                                 </Col>
