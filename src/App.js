@@ -8,6 +8,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Header } from "./components/header";
 import { AuthView } from './views/AuthView';
 import { ToastContainer } from 'react-toastify';
+import { useSelector } from 'react-redux';
+
 export const App = () => {
   const { isAuthenticated } = useSelector((state) => state.auth);
 
