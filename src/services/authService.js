@@ -103,7 +103,7 @@ export const registration = async (basicDetails) => {
         return { status: false, message: "An unexpected error occurred" };
     }
 }
-
+ 
 export const getAllAddmissionTypes = async () => {
     try {
         const response = await secondaryApi.get('/addmission-types');
@@ -128,17 +128,17 @@ export const getAllHSCPassStates = async () => {
     }
 }
 
-export const getAllHSCBoards = async () => {
+  export const getAllHSCBoards = async (passStateId) => {
     try {
-        const response = await secondaryApi.get('/hsc-boards');
-        return response.data.data; // Assuming the data is returned in this format
+      const response = await secondaryApi.get(`/hsc-boards?hscPassStateId=${passStateId}`);
+      return response.data.data; // Assuming the data is returned in this format
     } catch (error) {
-        if (error.response && error.response.data) {
-          return { status: false, message: error.response.data.message };
-        }
-        return { status: false, message: "An unexpected error occurred" };
+      if (error.response && error.response.data) {
+        return { status: false, message: error.response.data.message };
+      }
+      return { status: false, message: "An unexpected error occurred" };
     }
-}
+  };
 export const getAllReligions = async () => {
   try {
       const response = await secondaryApi.get(`/religions`);

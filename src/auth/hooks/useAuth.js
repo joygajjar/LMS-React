@@ -128,16 +128,16 @@ export const useAuth = () => {
   };
 
 
-  const handleGetAllHSCBoards = async () => {
+  const handleGetAllHSCBoards = async (passStateId) => {
     try {
-      const response = await getAllHSCBoards();
+      const response = await getAllHSCBoards(passStateId);
       console.log("response hook", response);
       return response;
     } catch (err) {
       console.log("error", err);
     }
   };
-
+  
   const handleGetAllReligions = async () => {
     try {
       const response = await getAllReligions();

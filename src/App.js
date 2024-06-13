@@ -9,6 +9,8 @@ import { Header } from "./components/header";
 import { AuthView } from './views/AuthView';
 import { ToastContainer } from 'react-toastify';
 export const App = () => {
+  const { isAuthenticated } = useSelector((state) => state.auth);
+
   return (
     <div className="App">
       <Router basename="/">

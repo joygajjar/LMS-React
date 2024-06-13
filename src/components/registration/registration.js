@@ -17,6 +17,8 @@ import StepLabel from '@mui/material/StepLabel';
 import ProgressBar from 'react-bootstrap/ProgressBar'; // Import ProgressBar
 import { useForm, Controller } from 'react-hook-form';
 
+import axios from 'axios';
+
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -35,9 +37,15 @@ export const RegistrationSec = () => {
     const { registration, getAllAddmissionTypes, getAllHSCPassStates, getAllHSCBoards } = useAuth();
 
 
-    const [hscBoards, setHSCBoards] = useState([]);
+
+
+
+
     const [addmissionTypes, setAddmissionTypes] = useState([]);
+    const [hscBoards, setHscBoards] = useState([]);
+    const [selectedBoardId, setSelectedBoardId] = useState('');
     const [hscPassStates, setHSCPassStates] = useState([]);
+    const [selectedPassStateId, setSelectedPassStateId] = useState('');
 
     const [categories, setCategories] = useState([]);
     console.log(categories);
@@ -93,8 +101,6 @@ export const RegistrationSec = () => {
                 console.log(addmissionTypesData)
                 const hscPassStatesData = await getAllHSCPassStates();
                 setHSCPassStates(hscPassStatesData);
-                const hscBoardsData = await getAllHSCBoards();
-                setHSCBoards(hscBoardsData);
 
                 //personInfo API
 
@@ -110,12 +116,34 @@ export const RegistrationSec = () => {
                 const instituteData = await getAllInstitutes();
                 setInstitutes(instituteData);
 
+
             } catch (error) {
                 console.error('Failed to fetch dropdown data:', error);
             }
         };
         fetchData();
     }, []);
+
+    const fetchHscBoardsByPassState = async (passStateId) => {
+        try {
+            const hscBoardsData = await getAllHSCBoards(passStateId);
+            setHscBoards(hscBoardsData); // Assuming the API response directly provides an array of boards
+        } catch (error) {
+            console.error('Error fetching HSC boards:', error);
+        }
+    };
+
+    const handlePassStateChange = (event) => {
+        const passStateId = event.target.value;
+        setSelectedPassStateId(passStateId);
+        fetchHscBoardsByPassState(passStateId);
+        setSelectedBoardId(''); // Reset selected board when pass state changes
+    };
+
+    const handleBoardChange = (event) => {
+        setSelectedBoardId(event.target.value);
+    };
+
 
     const handleChange = (e) => {
         const { name, value } = e.target
@@ -194,11 +222,11 @@ export const RegistrationSec = () => {
     const stuhandleChange = (event) => {
         const { name, value } = event.target;
         let updatedValue = value;
-    
+
         if (name === 'isLivingWithGuardians') {
             updatedValue = value === 'yes'; // Convert 'yes' to true and 'no' to false
         }
-    
+
         setStuformDetails((prevState) => ({ ...prevState, [name]: updatedValue }));
     };
 
@@ -220,19 +248,19 @@ export const RegistrationSec = () => {
             toast.error('No file selected.');
             return;
         }
-    
+
         if (selectedFile.size > 1 * 1024 * 1024) {
             toast.error('File size exceeds 2MB limit.');
             return;
         }
-    
+
         try {
             const response = await uploadFile(selectedFile); // Call the uploadFile function with the selected file
-            
+
             if (response.status) {
                 toast.success(response.data + ' ' + response.message);
                 console.log('File upload response:', response);
-                
+
             } else {
                 toast.error(response.message);
                 console.error('Error uploading file:', response.message);
@@ -256,14 +284,15 @@ export const RegistrationSec = () => {
                     id: formDetails.addmissionType
                 },
                 hscPassState: {
-                    id: formDetails.hscPassState
+                    id: selectedPassStateId,
                 },
                 hscBoard: {
-                    id: formDetails.hscBoard
+                    id: selectedBoardId,
+
                 }
             }
             const response = await registration(formdata, token);
-            
+
             if (response.status) {
                 toast.success(response.message);
             } else {
@@ -306,7 +335,7 @@ export const RegistrationSec = () => {
                 totalMarks: stuformDetails.totalMarks,
                 percentile: stuformDetails.percentile,
             }
-    
+
             const response = await registerStudent(studata, token);
             console.log(response);
 
@@ -330,7 +359,7 @@ export const RegistrationSec = () => {
                 institute: currentInstituteDetails.institute,
                 program: currentInstituteDetails.program,
             }
-    
+
             const response = await saveInstituteDetails(currentInstititeData);
             console.log(response);
             toast.success("Successfully Saved Institute Details");
@@ -339,7 +368,7 @@ export const RegistrationSec = () => {
             console.error('Failed to save institute details:', error.message);
         }
     };
-    
+
     const handleSubmitFunctions = [
         handleRegistrationFormSubmit,
         handleStudentDetailsSubmit,
@@ -364,7 +393,6 @@ export const RegistrationSec = () => {
 
     const formFilledPercentage = ((activeStep + 1) / steps.length) * 100;
     
-
     return (
         <React.Fragment>
             <Container>
@@ -383,7 +411,7 @@ export const RegistrationSec = () => {
                 </Stepper>
 
                 <div className="registration-box text-start">
-                       <Form onSubmit={(e) => handleNext(e)}>
+                    <Form onSubmit={(e) => handleNext(e)}>
                         <div>
                             {activeStep === 0 && (
                                 <React.Fragment>
@@ -400,26 +428,31 @@ export const RegistrationSec = () => {
                                                 </Form.Select>
                                             </FloatingLabel>
                                         </Col>
-                                        <Col xs={12} md={6}>
-                                            <FloatingLabel controlId="floatingSelect" label="HSC Passing State" className='mb-3'>
-                                                <Form.Select aria-label="Floating label select example" name="hscPassState" value={formDetails.state} onChange={handleChange} required>
-                                                    <option>Select</option>
-                                                    {hscPassStates.map(state => (
-                                                        <option key={state.id} value={state.id}>{state.hscPassingState}</option>
+                                        <Col xs={12} md={12} lg={3}>
+                                            <FloatingLabel controlId="floatingSelectHSCPassState" label="HSC Passing State" className='mb-3'>
+                                                <Form.Select aria-label="HSC Pass State" name="hscPassingState" value={selectedPassStateId} onChange={handlePassStateChange}>
+                                                    <option value="">Select HSC Pass State</option>
+                                                    {hscPassStates.map((state) => (
+                                                        <option key={state.id} value={state.id}>
+                                                            {state.hscPassingState}
+                                                        </option>
                                                     ))}
                                                 </Form.Select>
                                             </FloatingLabel>
                                         </Col>
                                         <Col xs={12} md={12} lg={3}>
-                                            <FloatingLabel controlId="floatingSelect" label="HSC Board" className='mb-3'>
-                                                <Form.Select aria-label="HSC Board" name="hscBoard" value={formDetails.board} onChange={handleChange} required>
-                                                    <option value="">Select</option>
-                                                    {hscBoards.map(board => (
-                                                        <option key={board.id} value={board.id}>{board.hscBoardName}</option>
+                                            <FloatingLabel controlId="floatingSelectHSCBoard" label="HSC Board" className='mb-3'>
+                                                <Form.Select aria-label="HSC Board" name="hscBoard" value={selectedBoardId} onChange={handleBoardChange} disabled={!selectedPassStateId} required>
+                                                    <option value="">Select HSC Board</option>
+                                                    {hscBoards.map((board) => (
+                                                        <option key={board.id} value={board.id}>
+                                                            {board.hscBoardName}
+                                                        </option>
                                                     ))}
                                                 </Form.Select>
                                             </FloatingLabel>
                                         </Col>
+
                                         <Col xs={12} md={12} lg={3}>
                                             <FloatingLabel controlId="floatingInput" label="Exam Year" className="mb-3">
                                                 <Form.Select
@@ -441,11 +474,11 @@ export const RegistrationSec = () => {
                                                     name="examMonth"
                                                     value={formDetails.examMonth}
                                                     onChange={handleChange}
-                                                    required >               
+                                                    required >
                                                     <option value="">Select Exam Month</option>
                                                     {months.map((month) => (
-                                                    <option key={month.value} value={month.value}>{month.label}</option>
-                                                            ))}
+                                                        <option key={month.value} value={month.value}>{month.label}</option>
+                                                    ))}
                                                 </Form.Select>
                                             </FloatingLabel>
                                         </Col>
@@ -517,12 +550,12 @@ export const RegistrationSec = () => {
                                             <FloatingLabel controlId="dob" label="Date Of Birth" className='mb-3'>
                                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                                                     <DatePicker
-                                                         value={dayjs(stuformDetails.dob)}
+                                                        value={dayjs(stuformDetails.dob)}
                                                         onChange={(date) => {
                                                             console.log(date)
                                                             const formattedDate = dayjs(date).format('YYYY-MM-DD');
                                                             stuhandleChange({ target: { name: 'dob', value: formattedDate } });
-                                                          }}
+                                                        }}
                                                         renderInput={(params) => <Form.Control {...params} type="date" required />}
                                                     />
                                                 </LocalizationProvider>
@@ -693,8 +726,8 @@ export const RegistrationSec = () => {
                                         <Col xs={12} md={12}>
                                             <Form.Group controlId="formFile" className="mb-3">
                                                 <Form.Label>Upload Photo</Form.Label>
-                                                <Form.Control type="file" className='choose-photo'  onChange={handleFileChange} />
-                       
+                                                <Form.Control type="file" className='choose-photo' onChange={handleFileChange} />
+
                                                 <p className='info'>Notes : Upload Scanned Copy of Photo (File size must not exceed 02 mb) </p>
                                             </Form.Group>
                                         </Col>
@@ -758,8 +791,8 @@ export const RegistrationSec = () => {
                                             <Button variant="primary" type="submit">Next</Button>
                                         ) : (
                                             <Button variant="primary" type="submit" onClick={(e) => handleInstituteDetailsSubmit(e, currentInstituteDetails)}>
-                                    Submit
-                                </Button>
+                                                Submit
+                                            </Button>
                                         )}
                                     </div>
                                 </Col>
