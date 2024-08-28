@@ -1,16 +1,18 @@
 
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import {
   signup, sendOtp, resendOtp, login, forgotPassword,
   resetPassword, validateToken, registration, getAllHSCPassStates,
   getAllHSCBoards, getAllAddmissionTypes, getAllCategories, getAllReligions,
   registerStudent, fetchLocationData, getAllInstitutes,
-  saveInstituteDetails,uploadFile
+  saveInstituteDetails,uploadFile,fetchDocuments, viewDocument,
+  viewProfile,
+  fetchProfileByEmail,
 } from "../../services/authService";
-import { loginSuccess } from "../../redux/action";
+
 
 export const useAuth = () => {
-  const dispatch = useDispatch();
+  
   const { isAuthenticated } = useSelector((store) => store?.auth)
 
   const handleRegister = async (data) => {
@@ -47,18 +49,7 @@ export const useAuth = () => {
     try {
       const response = await login(credentials);
       console.log("response hook", response);
-      let { status, data, message } = response
-      console.log(data)
-      const payload = {
-        token: data.jwtToken,
-        user: {
-          contactNo: data.contactNo,
-          email: data.email
-        }
-      }
-      sessionStorage.setItem('LOGIN_SUCCESS', JSON.stringify(payload))
-      const reducer = dispatch(loginSuccess(payload));
-      console.log(reducer)
+
       return response;
 
     } catch (err) {
@@ -137,7 +128,7 @@ export const useAuth = () => {
       console.log("error", err);
     }
   };
-  
+
   const handleGetAllReligions = async () => {
     try {
       const response = await getAllReligions();
@@ -211,10 +202,51 @@ export const useAuth = () => {
     }
 };
 
+const handleFetchDocuments = async (email) => {
+  try {
+      const response = await fetchDocuments(email);
+      return response;
+  } catch (err) {
+      console.log("error", err);
+  }
+};
+
+const handleViewDocument = async (fileName) => {
+  try {
+      await viewDocument(fileName);
+  } catch (err) {
+      console.log("error", err);
+  }
+};
+
+const handleViewProfile = async (token) => {
+  try {
+      const profileData = await viewProfile(token);
+      return profileData;
+    } catch (error) {
+      console.error('Error fetching profile data:', error);
+      return { success: false, error: error.message };
+    }
+  };
+
+
+  const handleFetchProfile = async (email) => {
+    try {
+        const response = await fetchProfileByEmail(email);
+        return response;
+    } catch (err) {
+        console.log("error", err);
+    }
+  };
+  
+
+
   return {
     signup: handleRegister, sendOtp: handleSendOtp, resendOtp: handleResendOTP, login: handleLogin, forgotPassword: handleForgotPassword, resetPassword: handleresetPassword, validateToken: handlevalidateToken, registration: handleRegisteration, getAllAddmissionTypes: handleGetAllAddmissionTypes,
     getAllHSCPassStates: handleGetAllHSCPassStates,
-    getAllHSCBoards: handleGetAllHSCBoards, getAllCategories: handleGetAllCategories, getAllReligions: handleGetAllReligions, registerStudent: handleRegistreStudent, fetchLocationData: handleGetAllLocation, getAllInstitutes: handleGetAllInstitute, saveInstituteDetails :handleCurrentInstituteDetails,uploadFile:handleUploadFile, isAuthenticated
+    getAllHSCBoards: handleGetAllHSCBoards, getAllCategories: handleGetAllCategories, getAllReligions: handleGetAllReligions, registerStudent: handleRegistreStudent, fetchLocationData: handleGetAllLocation, getAllInstitutes: handleGetAllInstitute, 
+    saveInstituteDetails :handleCurrentInstituteDetails,uploadFile:handleUploadFile,  handleFetchDocuments,
+    handleViewDocument,handleViewProfile,handleFetchProfile,isAuthenticated
   }
 };
 

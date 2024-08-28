@@ -1,432 +1,460 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
 
 /* Common CSS Start */
 body {
-    padding: 0;
-    margin: 0;
-    font-family: "Roboto", sans-serif;
+  padding: 0;
+  margin: 0;
+  font-family: "Roboto", sans-serif;
 }
 img {
-    max-width: 100%;
+  max-width: 100%;
 }
-.btn-primary, .btn-secondary {
-    border-radius: 50px;
-    font-size: 18px;
+.btn-primary,
+.btn-secondary {
+  border-radius: 50px;
+  font-size: 18px;
 }
 .is-sticky {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    background-color: #ffffff;
-    box-shadow: 0px 0px 10px 0px rgb(231 235 241);
-    z-index: 1;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: #ffffff;
+  box-shadow: 0px 0px 10px 0px rgb(231 235 241);
+  z-index: 1;
 }
-p.error-message {
-    padding: 5px 15px;
-    border: 1px solid #ff0000;
-    border-radius: 50px;
-    color: #ff0000;
-    background: #fff5f5;
+.invalid-feedback {
+  padding: 5px 15px;
+  border: 1px solid #ff0000;
+  border-radius: 50px;
+  color: #ff0000;
+  background: #fff5f5;
+  margin-top: 10px;
 }
 p.info {
-    background: #fffaf3;
-    padding: 5px 15px;
-    margin-top: 10px;
-    color: #f6921d;
-    border: 1px solid #f6921d;
-    border-radius: 50px;
-    display: inline-block;
+  background: #fffaf3;
+  padding: 5px 15px;
+  margin-top: 10px;
+  color: #f6921d;
+  border: 1px solid #f6921d;
+  border-radius: 50px;
+  display: inline-block;
 }
 .section-title h2 {
-    font-size: 25px;
-    text-transform: uppercase;
-    font-weight: 600;
-    position: relative;
-    display: inline-block;
+  font-size: 25px;
+  text-transform: uppercase;
+  font-weight: 600;
+  position: relative;
+  display: inline-block;
 }
-.section-title h2:after, .section-title h2:before {
-    content: "";
-    position: absolute;
-    top: 50%;
-    width: 100px;
-    height: 2px;
-    background: #325481;
-    transform: translateY(-50%);
+.section-title h2:after,
+.section-title h2:before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 100px;
+  height: 2px;
+  background: #325481;
+  transform: translateY(-50%);
 }
 .section-title h2:after {
-    left: 100%;
-    margin-left: 10px;
+  left: 100%;
+  margin-left: 10px;
 }
 .section-title h2:before {
-    right: 100%;
-    margin-right: 10px;
+  right: 100%;
+  margin-right: 10px;
 }
 
 /* Form Floating CSS Start */
 .form-floating label {
-    color: #6f8197;
-    z-index: initial;
+  color: #6f8197;
+  z-index: initial;
 }
-.form-floating>.form-control:not(:placeholder-shown)~label {
-    color: #6f8197;
+.form-floating > .form-control:not(:placeholder-shown) ~ label {
+  color: #6f8197;
 }
 .form-floating input {
-    border-radius: 50px;
-    padding-left: 35px !important;
-    padding-right: 35px !important;
+  border-radius: 50px;
+  padding-left: 35px !important;
+  padding-right: 35px !important;
 }
 .form-floating input:focus {
-    box-shadow: none;
-    outline: none;
-    border-color: #325481;
+  box-shadow: none;
+  outline: none;
+  border-color: #325481;
 }
 .form-floating select {
-    border-radius: 50px;
-    padding-left: 35px !important;
-    padding-right: 35px !important;
+  border-radius: 50px;
+  padding-left: 35px !important;
+  padding-right: 35px !important;
 }
 .form-floating select:focus {
-    box-shadow: none;
-    outline: none;
-    border-color: #325481;
+  box-shadow: none;
+  outline: none;
+  border-color: #325481;
 }
 .form-floating label {
-    left: 24px;
+  left: 24px;
 }
 .form-control:disabled {
-    background-color: #e1ebf8;
+  background-color: #e1ebf8;
 }
-.form-floating>.form-control:disabled~label::after, .form-floating>:disabled~label::after {
-    background-color: #e1ebf8;
+.form-floating > .form-control:disabled ~ label::after,
+.form-floating > :disabled ~ label::after {
+  background-color: #e1ebf8;
 }
 .form-floating fieldset {
-    border-color: #dee2e6 !important;
+  border-color: #dee2e6 !important;
 }
 .form-floating .MuiInputBase-formControl {
-    border-radius: 50px;
+  border-radius: 50px;
 }
 .form-floating .MuiButtonBase-root {
-    margin-right: 5px;
+  margin-right: 5px;
 }
 .form-floating .MuiInputBase-input {
-    padding-top: 1.625rem;
-    padding-bottom: .625rem;
+  padding-top: 1.625rem;
+  padding-bottom: 0.625rem;
 }
-.form-floating>.MuiFormControl-root~label{
-    color: rgba(var(--bs-body-color-rgb), .65);
-    transform: scale(.85) translateY(-.5rem) translateX(.15rem);
+.form-floating > .MuiFormControl-root ~ label {
+  color: rgba(var(--bs-body-color-rgb), 0.65);
+  transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
 }
 .Mui-selected {
-    background-color: #325481 !important;
+  background-color: #325481 !important;
 }
 .MuiPickersDay-today {
-    background-color: #2c89c9 !important;
-    color: #ffffff !important;
-    border-color: #2c89c9 !important;
+  background-color: #2c89c9 !important;
+  color: #ffffff !important;
+  border-color: #2c89c9 !important;
 }
 .MuiButtonBase-root:hover {
-    background-color: #e1ebf8 !important;
+  background-color: #e1ebf8 !important;
 }
 .MuiPickersYear-yearButton:hover {
-    background-color: #e1ebf8 !important;
+  background-color: #e1ebf8 !important;
 }
 
 /* Header CSS Start */
 .header-section .navbar-brand {
-    font-family: "Roboto Slab", serif;
-    font-weight: 900;
+  font-family: "Roboto Slab", serif;
+  font-weight: 900;
 }
 .gov-detail h4 {
-    font-size: 18px;
-    font-weight: 600;
-    margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
 }
 .gov-detail p {
-    font-size: 16px;
-    font-weight: 400;
-    margin: 0;
+  font-size: 16px;
+  font-weight: 400;
+  margin: 0;
 }
 .header-menu {
-    border-top: 1px solid #e1ebf8;
-    border-bottom: 1px solid #e1ebf8;
+  border-top: 1px solid #e1ebf8;
+  border-bottom: 1px solid #e1ebf8;
 }
 .header-menu .nav-link {
-    font-size: 16px;
-    padding: 8px;
-    border-bottom: 1px solid transparent;
-    position: relative;
+  font-size: 16px;
+  padding: 8px;
+  border-bottom: 1px solid transparent;
+  position: relative;
 }
-.header-menu .btn-primary, .header-menu .btn-secondary {
-    padding: 8px 20px;
+.header-menu .btn-primary,
+.header-menu .btn-secondary {
+  padding: 8px 20px;
 }
-.header-menu .btn-primary:hover:after, .header-menu .btn-primary:hover:before {
-    display: none;
+.header-menu .btn-primary:hover:after,
+.header-menu .btn-primary:hover:before {
+  display: none;
 }
-.header-menu .btn-secondary:hover:after, .header-menu .btn-secondary:hover:before {
-    display: none;
+.header-menu .btn-secondary:hover:after,
+.header-menu .btn-secondary:hover:before {
+  display: none;
 }
-.header-menu .nav-link:before, .header-menu .nav-link:after {
-    content: '';
-    position: absolute;
-    width: 0%;
-    height: 2px;
-    bottom: -2px;
-    background: #325481;
+.header-menu .nav-link:before,
+.header-menu .nav-link:after {
+  content: "";
+  position: absolute;
+  width: 0%;
+  height: 2px;
+  bottom: -2px;
+  background: #325481;
 }
 .header-menu .nav-link:before {
-    left: 0;
+  left: 0;
 }
 .header-menu .nav-link:after {
-    right: 0;
-    background: #325481;
-    transition: width 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
+  right: 0;
+  background: #325481;
+  transition: width 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 .header-menu .nav-link:hover:before {
-    background: #325481;
-    width: 100%;
-    transition: width 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+  background: #325481;
+  width: 100%;
+  transition: width 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 .header-menu .nav-link:hover:after {
-    background: transparent;
-    width: 100%;
-    transition: 0s;
+  background: transparent;
+  width: 100%;
+  transition: 0s;
 }
 .header-section .navbar-toggler {
-    border: 1px solid #325481;
-    background-color: #325481;
-    color: #ffffff;
+  border: 1px solid #325481;
+  background-color: #325481;
+  color: #ffffff;
 }
 .header-section .navbar-toggler:focus {
-    outline: none;
-    box-shadow: none;
+  outline: none;
+  box-shadow: none;
 }
 
 /* Form Box (Common Form) CSS Start */
 .form-box {
-    width: 50%;
-    margin: 0 auto;
-    padding: 40px;
-    box-shadow: 0px 0px 10px 0px rgb(231 235 241);
+  width: 50%;
+  margin: 0 auto;
+  padding: 40px;
+  box-shadow: 0px 0px 10px 0px rgb(231 235 241);
 }
 .form-box .btn-primary {
-    width: 100%;
-    --tilt: 40px;
-    display: block;
-    box-sizing: border-box;
-    padding: 10px 45px;
-    border-radius: 50px;
-    position: relative;
-    overflow: hidden;
-    background: transparent !important;
-    text-transform: uppercase;
-    color: #325481 !important;
+  width: 100%;
+  --tilt: 40px;
+  display: block;
+  box-sizing: border-box;
+  padding: 10px 45px;
+  border-radius: 50px;
+  position: relative;
+  overflow: hidden;
+  background: transparent !important;
+  text-transform: uppercase;
+  color: #325481 !important;
 }
 .form-box .btn-primary:hover {
-    color: #ffffff !important;
+  color: #ffffff !important;
 }
-.form-box .btn-primary:before, .form-box .btn-primary:after {
-    content: "";
-    z-index: -1;
-    width: calc(100% + 40px);
-    height: 100%;
-    position: absolute;
-    top: 0;
-    background: #325481 !important;
-    clip-path: polygon(0 0, calc(100% - 40px) 0, 100% 100%, 0 100%);
-    transition: transform 0.6s;
+.form-box .btn-primary:before,
+.form-box .btn-primary:after {
+  content: "";
+  z-index: -1;
+  width: calc(100% + 40px);
+  height: 100%;
+  position: absolute;
+  top: 0;
+  background: #325481 !important;
+  clip-path: polygon(0 0, calc(100% - 40px) 0, 100% 100%, 0 100%);
+  transition: transform 0.6s;
 }
 .form-box .btn-primary:before {
-    left: calc(-100% - 40px);
+  left: calc(-100% - 40px);
 }
 .form-box .btn-primary:after {
-    left: 100%;
-    transform: rotate(180deg);
+  left: 100%;
+  transform: rotate(180deg);
 }
 .form-box .btn-primary:hover:before {
-    transform: translateX(100%);
+  transform: translateX(100%);
 }
 .form-box .btn-primary:hover:after {
-    transform: rotate(180deg) translateX(100%);
+  transform: rotate(180deg) translateX(100%);
 }
 .form-box .form-text {
-    font-size: 16px;
-    color: #6f8197;
+  font-size: 16px;
+  color: #6f8197;
 }
 .form-box .form-floating {
-    position: relative;
+  position: relative;
 }
 .form-box .form-floating .svg-inline--fa {
-    position: absolute;
-    top: 50%;
-    right: 18px;
-    transform: translateY(-50%);
-    font-size: 20px;
-    color: #6f8197;
+  position: absolute;
+  top: 50%;
+  right: 18px;
+  transform: translateY(-50%);
+  font-size: 20px;
+  color: #6f8197;
 }
 .form-box .form-floating input {
-    padding-right: 50px !important;
+  padding-right: 50px !important;
 }
 
 /* Footer CSS Start */
 .copyright p {
-    font-size: 16px;
+  font-size: 16px;
 }
 .footer-section {
-    bottom: 0;
-    position: fixed;
-    left: 0;
-    width: 100%;
+  bottom: 0;
+  position: fixed;
+  left: 0;
+  width: 100%;
 }
 
 /* OTP Page CSS Start */
 .otp-input > div {
-    justify-content: center;
+  justify-content: center;
 }
 .otp-input input {
-    width: 50px !important;
-    height: 50px;
-    margin: 0 5px;
+  width: 50px !important;
+  height: 50px;
+  margin: 0 5px;
 }
 
 /* Registration Page CSS Start */
 .registration-box {
-    padding: 40px;
-    box-shadow: 0px 0px 10px 0px rgb(231 235 241);
+  padding: 40px;
+  box-shadow: 0px 0px 10px 0px rgb(231 235 241);
 }
 .registration-box .form-floating input {
-    padding-right: 50px !important;
+  padding-right: 50px !important;
 }
 .registration-box h3 {
-    padding: 10px 20px 20px 0;
-    margin-bottom: 20px;
-    background: transparent;
-    font-size: 22px;
-    text-align: left;
+  padding: 10px 20px 20px 0;
+  margin-bottom: 20px;
+  background: transparent;
+  font-size: 22px;
+  text-align: left;
 }
 .registration-box .choose-photo {
-    line-height: 45px;
-    border-radius: 50px;
+  line-height: 45px;
+  border-radius: 50px;
 }
 .registration-box .choose-photo:focus {
-    outline: none;
-    box-shadow: none;
-    border-color: #325481;
+  outline: none;
+  box-shadow: none;
+  border-color: #325481;
 }
 .registration-box .btn-dark {
-    display: block;
-    box-sizing: border-box;
-    padding: 10px 45px;
-    border-radius: 50px;
-    position: relative;
-    overflow: hidden;
-    text-transform: uppercase;
+  display: block;
+  box-sizing: border-box;
+  padding: 10px 45px;
+  border-radius: 50px;
+  position: relative;
+  overflow: hidden;
+  text-transform: uppercase;
 }
-
 .registration-box .btn-primary {
-    --tilt: 40px;
-    display: block;
-    box-sizing: border-box;
-    padding: 10px 45px;
-    border-radius: 50px;
-    position: relative;
-    overflow: hidden;
-    background: transparent !important;
-    text-transform: uppercase;
-    color: #325481 !important;
+  --tilt: 40px;
+  display: block;
+  box-sizing: border-box;
+  padding: 10px 45px;
+  border-radius: 50px;
+  position: relative;
+  overflow: hidden;
+  background: transparent !important;
+  text-transform: uppercase;
+  color: #325481 !important;
 }
 .registration-box .btn-primary:hover {
-    color: #ffffff !important;
+  color: #ffffff !important;
 }
-.registration-box .btn-primary:before, .registration-box .btn-primary:after {
-    content: "";
-    z-index: -1;
-    width: calc(100% + 40px);
-    height: 100%;
-    position: absolute;
-    top: 0;
-    background: #325481 !important;
-    clip-path: polygon(0 0, calc(100% - 40px) 0, 100% 100%, 0 100%);
-    transition: transform 0.6s;
+.registration-box .btn-primary:before,
+.registration-box .btn-primary:after {
+  content: "";
+  z-index: -1;
+  width: calc(100% + 40px);
+  height: 100%;
+  position: absolute;
+  top: 0;
+  background: #325481 !important;
+  clip-path: polygon(0 0, calc(100% - 40px) 0, 100% 100%, 0 100%);
+  transition: transform 0.6s;
 }
 .registration-box .btn-primary:before {
-    left: calc(-100% - 40px);
+  left: calc(-100% - 40px);
 }
 .registration-box .btn-primary:after {
-    left: 100%;
-    transform: rotate(180deg);
+  left: 100%;
+  transform: rotate(180deg);
 }
 .registration-box .btn-primary:hover:before {
-    transform: translateX(100%);
+  transform: translateX(100%);
 }
 .registration-box .btn-primary:hover:after {
-    transform: rotate(180deg) translateX(100%);
+  transform: rotate(180deg) translateX(100%);
 }
 
+/* Services Page CSS Start */
+.services-wrap h3 {
+  font-size: 22px;
+}
+.services-wrap .card {
+  padding: 20px;
+  box-shadow: 0px 0px 10px 0px rgb(231 235 241);
+  text-align: center;
+}
+.services-wrap .card .card-title {
+  font-size: 18px;
+}
 
 /* Responsive Start */
 
 @media screen and (min-width: 768px) {
-    .w-md-50 {
-        width: 50% !important;
-    }
+  .w-md-50 {
+    width: 50% !important;
+  }
 }
 @media screen and (max-width: 992px) {
-    .form-box {
-        width: 70%;
-    }
-    .registration-box {
-        padding: 25px;
-    }
-    .form-box .form-floating input {
-        padding-right: 20px !important;
-        padding-left: 20px !important;
-    }
-    .form-floating select {
-        padding-left: 20px !important;
-    }
-    .registration-box .form-floating input {
-        padding-right: 20px !important;
-        padding-left: 20px !important;
-    }
-    .form-floating label {
-        left: 8px;
-    }
+  .form-box {
+    width: 70%;
+  }
+  .registration-box {
+    padding: 25px;
+  }
+  .form-box .form-floating input {
+    padding-right: 20px !important;
+    padding-left: 20px !important;
+  }
+  .form-floating select {
+    padding-left: 20px !important;
+  }
+  .registration-box .form-floating input {
+    padding-right: 20px !important;
+    padding-left: 20px !important;
+  }
+  .form-floating label {
+    left: 8px;
+  }
 }
 @media screen and (max-width: 767px) {
-    p.info {
-        font-size: 14px;
-        text-align: center;
-    }
-    .w-sm-100 {
-        width: 100% !important;
-    }
-    .form-box {
-        width: 100%;
-        padding: 25px;
-    }
-    .registration-box {
-        padding: 15px;
-    }
-    .section-title h2:after, .section-title h2:before {
-        display: none;
-    }
-    .form-floating label {
-        left: 8px;
-    }
-    .form-box .form-floating input {
-        padding-right: 20px !important;
-        padding-left: 20px !important;
-    }
-    .form-floating select {
-        padding-left: 20px !important;
-    }
-    .registration-box .form-floating input {
-        padding-right: 20px !important;
-        padding-left: 20px !important;
-    }
-    .otp-input input {
-        width: 40px !important;
-        height: 40px;
-    }
+  p.info {
+    font-size: 14px;
+    text-align: center;
+  }
+  .w-sm-100 {
+    width: 100% !important;
+  }
+  .form-box {
+    width: 100%;
+    padding: 25px;
+  }
+  .registration-box {
+    padding: 15px;
+  }
+  .section-title h2:after,
+  .section-title h2:before {
+    display: none;
+  }
+  .form-floating label {
+    left: 8px;
+  }
+  .form-box .form-floating input {
+    padding-right: 20px !important;
+    padding-left: 20px !important;
+  }
+  .form-floating select {
+    padding-left: 20px !important;
+  }
+  .registration-box .form-floating input {
+    padding-right: 20px !important;
+    padding-left: 20px !important;
+  }
+  .otp-input input {
+    width: 40px !important;
+    height: 40px;
+  }
 }
+
+
+
+
+
+

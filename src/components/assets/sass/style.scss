@@ -1,0 +1,1550 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+
+/* Text Color Variables */
+$text-primary: #325481;
+$text-secondary: #f6921d;
+$text-dark: #6f8197;
+$text-light: #e1ebf8;
+$text-white: #ffffff;
+$text-black: #000000;
+$text-danger: #ff0000;
+$text-info: #f6921d;
+$text-success: #00c331;
+
+/* Background Color Variables */
+$bg-primary: #325481;
+$bg-secondary: #f6921d;
+$bg-light: #e1ebf8;
+$bg-dark: #6f8197;
+$bg-white: #ffffff;
+$bg-black: #000000;
+$bg-danger-light: #fff5f5;
+$bg-danger-dark: #ed5353;
+$bg-info-light: #fffaf3;
+$bg-success-light: #f4fff3;
+
+/* Border Color Variables */
+$border-primary: #325481;
+$border-secondary: #f6921d;
+$border-light: #e1ebf8;
+$border-dark: #6f8197;
+$border-white: #ffffff;
+$border-black: #000000;
+$border-danger: #ff0000;
+$border-info: #f6921d;
+$border-success: #00c331;
+
+/* Font Family Variables */
+$font-roboto: "Roboto", sans-serif;
+
+/* Common CSS Start */
+body {
+  padding: 0;
+  margin: 0;
+  font-family: $font-roboto;
+}
+img {
+  max-width: 100%;
+}
+.btn-primary,
+.btn-secondary {
+  border-radius: 50px;
+  font-size: 18px;
+}
+.is-sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: $bg-white;
+  box-shadow: 0px 0px 10px 0px rgb(231 235 241);
+  z-index: 1;
+}
+.invalid-feedback {
+  padding: 5px 15px;
+  border: 1px solid $border-danger;
+  border-radius: 50px;
+  color: $text-danger;
+  background: $bg-danger-light;
+  margin-top: 10px;
+}
+.pb-80 {
+  padding-bottom: 80px;
+}
+.pb-sm-100 {
+  @media screen and (max-width: 767px) {
+    padding-bottom: 100px;
+  }
+}
+p.error-message {
+  padding: 5px 15px;
+  border: 1px solid $border-danger;
+  border-radius: 50px;
+  color: $text-danger;
+  background: $bg-danger-light;
+  margin-top: 10px;
+}
+p.info {
+  background: $bg-info-light;
+  padding: 5px 15px;
+  margin-top: 10px;
+  color: $text-info;
+  border: 1px solid $border-info;
+  border-radius: 50px;
+  display: inline-block;
+  @media screen and (max-width: 767px) {
+    font-size: 14px;
+    text-align: center;
+  }
+}
+.section-title {
+  h2 {
+    font-size: 25px;
+    text-transform: uppercase;
+    font-weight: 600;
+    position: relative;
+    display: inline-block;
+  }
+}
+h5.subtitle-style {
+  position: relative;
+  display: inline-block;
+  font-size: 16px;
+  text-transform: uppercase;
+  font-weight: 400;
+  letter-spacing: 2px;
+  &:after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    margin-left: 10px;
+    width: 100px;
+    height: 1px;
+    transform: translateY(-50%);
+    @media screen and (max-width: 767px) {
+      display: none;
+    }
+  }
+}
+.title-style {
+  color: $text-primary;
+  span {
+    color: $text-secondary;
+  }
+}
+.section-title {
+  h2 {
+    &:after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 100%;
+      margin-left: 10px;
+      width: 100px;
+      height: 2px;
+      background: $bg-primary;
+      transform: translateY(-50%);
+      @media screen and (max-width: 767px) {
+        display: none;
+      }
+    }
+    &:before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      right: 100%;
+      margin-right: 10px;
+      width: 100px;
+      height: 2px;
+      background: $bg-primary;
+      transform: translateY(-50%);
+      @media screen and (max-width: 767px) {
+        display: none;
+      }
+    }
+  }
+}
+
+/* Form Floating CSS Start */
+.form-floating {
+  label {
+    color: $text-dark;
+    z-index: initial;
+    left: 24px;
+    @media screen and (max-width: 992px) {
+      left: 8px;
+    }
+    @media screen and (max-width: 767px) {
+      left: 8px;
+    }
+  }
+  > .form-control:not(:placeholder-shown) ~ label {
+    color: $text-dark;
+  }
+  input {
+    border-radius: 50px;
+    padding-left: 35px !important;
+    padding-right: 35px !important;
+    @media screen and (max-width: 767px) {
+      padding-right: 20px !important;
+      padding-left: 20px !important;
+    }
+    &:focus {
+      box-shadow: none;
+      outline: none;
+      border-color: $border-primary;
+    }
+  }
+  select {
+    border-radius: 50px;
+    padding-left: 35px !important;
+    padding-right: 35px !important;
+    @media screen and (max-width: 992px) {
+      padding-left: 20px !important;
+    }
+    @media screen and (max-width: 767px) {
+      padding-left: 20px !important;
+    }
+    &:focus {
+      box-shadow: none;
+      outline: none;
+      border-color: $border-primary;
+    }
+  }
+  .form-control {
+    &:disabled {
+      background-color: $bg-light;
+    }
+  }
+  > .form-control:disabled ~ label {
+    &:after {
+      background-color: $bg-light;
+    }
+  }
+  > :disabled ~ label {
+    &:after {
+      background-color: $bg-light;
+    }
+  }
+  fieldset {
+    border-color: #dee2e6 !important;
+  }
+  .MuiInputBase-formControl {
+    border-radius: 50px;
+  }
+  .MuiButtonBase-root {
+    margin-right: 5px;
+  }
+  .MuiInputBase-input {
+    padding-top: 1.625rem;
+    padding-bottom: 0.625rem;
+  }
+  > .MuiFormControl-root ~ label {
+    color: rgba(var(--bs-body-color-rgb), 0.65);
+    transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
+  }
+}
+.Mui-selected {
+  background-color: $bg-primary !important;
+}
+.MuiPickersDay-today {
+  background-color: $bg-secondary !important;
+  color: $text-white !important;
+  border-color: $border-secondary !important;
+}
+.MuiButtonBase-root:hover {
+  background-color: $bg-light !important;
+}
+.MuiPickersYear-yearButton:hover {
+  background-color: $bg-light !important;
+}
+
+/* Header CSS Start */
+.header-section {
+  .navbar-brand {
+    font-family: "Roboto Slab", serif;
+    font-weight: 900;
+  }
+  .gov-detail {
+    h4 {
+      font-size: 18px;
+      font-weight: 600;
+      margin: 0;
+    }
+    p {
+      font-size: 16px;
+      font-weight: 400;
+      margin: 0;
+    }
+  }
+  .header-menu {
+    border-top: 1px solid $border-light;
+    border-bottom: 1px solid $border-light;
+    .nav-link {
+      font-size: 16px;
+      padding: 8px;
+      border-bottom: 1px solid transparent;
+      position: relative;
+      // &:before {
+      //   content: "";
+      //   position: absolute;
+      //   width: 0%;
+      //   height: 2px;
+      //   left: 0;
+      //   bottom: -2px;
+      //   background: $bg-primary;
+      // }
+      // &:after {
+      //   content: "";
+      //   position: absolute;
+      //   width: 0%;
+      //   height: 2px;
+      //   bottom: -2px;
+      //   background: $bg-primary;
+      //   right: 0;
+      //   transition: width 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
+      // }
+      // &:hover {
+      //   &:before {
+      //     background: $bg-primary;
+      //     width: 100%;
+      //     transition: width 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+      //   }
+      //   &:after {
+      //     background: transparent;
+      //     width: 100%;
+      //     transition: 0s;
+      //   }
+      // }
+    }
+    .nav-link {
+      font-size: 16px;
+      padding: 8px;
+      border-bottom: 1px solid transparent;
+      position: relative;
+      color: #325481;
+    }
+
+    .btn-primary {
+      padding: 8px 20px;
+      &:hover {
+        &:after {
+          display: none;
+        }
+        &:before {
+          display: none;
+        }
+      }
+    }
+    .btn-secondary {
+      padding: 8px 20px;
+      &:hover {
+        &:after {
+          display: none;
+        }
+        &:before {
+          display: none;
+        }
+      }
+    }
+  }
+  .navbar-toggler {
+    border: 1px solid $border-primary;
+    background-color: $bg-primary;
+    color: $text-white;
+    padding: 6px 10px;
+    &:focus {
+      outline: none;
+      box-shadow: none;
+    }
+    svg {
+      height: 25px;
+    }
+  }
+}
+
+/* Form Box (Common Form) CSS Start */
+.form-box {
+  width: 50%;
+  margin: 0 auto;
+  padding: 40px;
+  box-shadow: 0px 0px 10px 0px rgb(231 235 241);
+  @media screen and (max-width: 1024px) {
+    width: 70%;
+  }
+  @media screen and (max-width: 767px) {
+    width: 100%;
+    padding: 25px;
+  }
+  .btn-primary {
+    width: 100%;
+    --tilt: 40px;
+    display: block;
+    box-sizing: border-box;
+    padding: 10px 45px;
+    border-radius: 50px;
+    position: relative;
+    overflow: hidden;
+    background: transparent !important;
+    text-transform: uppercase;
+    color: $text-primary !important;
+    &:before {
+      content: "";
+      z-index: -1;
+      width: calc(100% + 40px);
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: calc(-100% - 40px);
+      background: $bg-primary !important;
+      clip-path: polygon(0 0, calc(100% - 40px) 0, 100% 100%, 0 100%);
+      transition: transform 0.6s;
+    }
+    &:after {
+      content: "";
+      z-index: -1;
+      width: calc(100% + 40px);
+      height: 100%;
+      position: absolute;
+      left: 100%;
+      transform: rotate(180deg);
+      top: 0;
+      background: $bg-primary !important;
+      clip-path: polygon(0 0, calc(100% - 40px) 0, 100% 100%, 0 100%);
+      transition: transform 0.6s;
+    }
+    &:hover {
+      color: $text-white !important;
+      &:before {
+        transform: translateX(100%);
+      }
+      &:after {
+        transform: rotate(180deg) translateX(100%);
+      }
+    }
+  }
+  .form-text {
+    font-size: 16px;
+    color: $text-dark;
+  }
+  .form-floating {
+    position: relative;
+    .svg-inline--fa {
+      position: absolute;
+      top: 50%;
+      right: 18px;
+      transform: translateY(-50%);
+      font-size: 20px;
+      color: $text-dark;
+    }
+    input {
+      padding-right: 50px !important;
+    }
+  }
+}
+
+/* Footer CSS Start */
+.footer-section {
+  width: 100%;
+  .copyright {
+    p {
+      font-size: 16px;
+    }
+  }
+}
+
+/* OTP Page CSS Start */
+.otp-input {
+  > div {
+    justify-content: center;
+  }
+  input {
+    width: 50px !important;
+    height: 50px;
+    margin: 0 5px;
+    @media screen and (max-width: 767px) {
+      width: 40px !important;
+      height: 40px;
+    }
+  }
+}
+
+/* Services Page CSS Start */
+.services-section {
+  .section-title {
+    h2 {
+      margin-bottom: 0;
+      &:before {
+        display: none;
+      }
+      &:after {
+        display: none;
+      }
+      @media screen and (max-width: 767px) {
+        font-size: 20px;
+        line-height: 30px;
+      }
+    }
+  }
+}
+.services-wrap {
+  h3 {
+    font-size: 22px;
+  }
+  .card {
+    padding: 20px;
+    box-shadow: 0px 0px 10px 0px rgb(231 235 241);
+    text-align: center;
+    .card-title {
+      font-size: 18px;
+    }
+  }
+}
+
+.header-part {
+  background-color: $bg-white;
+  box-shadow: 0px 0px 10px 0px rgb(231 235 241);
+  .lg-header {
+    margin-left: 290px;
+    @media screen and (max-width: 992px) {
+      margin-left: 0;
+    }
+  }
+  .expand-header {
+    margin-left: 80px;
+    @media screen and (max-width: 992px) {
+      margin-left: 0;
+    }
+  }
+  .navbar-nav {
+    .nav-link {
+      margin-right: 10px;
+    }
+  }
+
+  .dropdown {
+    .dropdown-toggle {
+      &:after {
+        display: none;
+      }
+    }
+    .dropdown-menu {
+      position: absolute;
+      left: initial;
+      right: 0;
+      max-width: 250px;
+      width: 250px;
+      white-space: normal;
+      box-shadow: 0px 0px 10px 0px rgb(231 235 241);
+      border: none;
+      background-color: $bg-white;
+      padding: 10px 15px;
+      h4 {
+        font-size: 16px;
+      }
+      .dropdown-item {
+        white-space: normal;
+        margin-bottom: 5px;
+        padding: 8px;
+        &:hover {
+          color: $text-primary;
+          background-color: $bg-light;
+        }
+      }
+    }
+  }
+}
+
+// ----- Durgesh -------
+
+.home {
+  width: 100%;
+  height: 100vh;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.2)),
+    url(../images/pieces-blue-stationery.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.home .content {
+  text-align: center;
+  padding-top: 230px;
+}
+.home .content h5 {
+  color: white;
+  font-size: 38px;
+  font-weight: 550;
+  text-shadow: 0px 1px 1px black;
+}
+.home .content h1 {
+  color: white;
+  font-size: 70px;
+  font-weight: 550;
+  text-shadow: 0px 1px 1px black;
+  margin-top: 5px;
+}
+.changecontent {
+  color: #ffa500;
+  text-shadow: 0px 1px 1px black;
+}
+
+.home .content p {
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  text-shadow: 0px 1px 1px black;
+  margin-bottom: 30px;
+  margin-top: 5px;
+}
+.home .content a {
+  padding: 15px 20px;
+  background: $bg-white;
+  color: $text-black;
+  font-weight: 500;
+  border-radius: 25px;
+  text-decoration: none;
+  transition: 0.5s;
+  font-size: 18px;
+}
+.home .content a:hover {
+  background: #ffa500;
+  color: white;
+}
+@media (max-width: 850px) {
+  .home {
+    background-position: 50%;
+  }
+}
+@media (max-width: 750px) {
+  .home .content h5 {
+    font-size: 25px;
+  }
+  .home .content h1 {
+    font-size: 38px;
+  }
+  .home .content p {
+    font-size: 13px;
+  }
+}
+@media (max-width: 450px) {
+  .home {
+    height: 60vh;
+  }
+}
+
+.services {
+  a {
+    text-decoration: none;
+  }
+}
+.services h1 {
+  color: #002f6c;
+}
+.services h1 span {
+  color: $text-secondary;
+}
+.services .card {
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 8px;
+  border: none;
+  cursor: pointer;
+  height: 100%;
+}
+.services .card:hover {
+  box-shadow: rgba(0, 53, 110, 0.1) 5px 5px 12px;
+}
+
+.services .card i {
+  font-size: 80px;
+  text-align: center;
+  color: #ffa500;
+  margin-top: 20px;
+}
+.services .card .card-body h3 {
+  font-weight: 600;
+}
+.services .card .card-body {
+  text-align: center;
+}
+
+.about-section {
+  .about-txt {
+    padding: 5px 0px 30px 0px;
+  }
+  .about-txt h1 {
+    color: #002f6c;
+  }
+  .about-txt span {
+    color: $text-secondary;
+  }
+  .lead {
+    text-align: left;
+  }
+  h2 {
+    text-align: left;
+  }
+  .connect-button {
+    text-align: left;
+    button {
+      background-color: #325481;
+      color: white;
+    }
+  }
+}
+
+// ---------Home page css start
+
+// ------Home page css end
+
+.global-filter,
+.column-filter {
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  border: 1px solid $border-light;
+  width: 100%;
+}
+
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  @media screen and (max-width: 767px) {
+    display: block;
+  }
+
+  span {
+    @media screen and (max-width: 767px) {
+      margin-bottom: 10px;
+      display: inline-block;
+    }
+  }
+
+  button {
+    margin: 0 0.25rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid $border-primary;
+    border-radius: 4px;
+    background-color: $bg-white;
+    cursor: pointer;
+
+    &:disabled {
+      background-color: $bg-light;
+      border: $border-light;
+      cursor: not-allowed;
+    }
+  }
+
+  input {
+    padding: 0.5rem;
+    border: 1px solid $border-dark;
+  }
+
+  select {
+    padding: 0.5rem;
+    border: 1px solid $border-dark;
+  }
+}
+
+// Registration-box --- CSS Start
+
+.registration-box {
+  padding: 40px;
+  box-shadow: 0px 0px 10px 0px rgb(231 235 241);
+  @media screen and (max-width: 992px) {
+    padding: 25px;
+  }
+  @media screen and (max-width: 767px) {
+    padding: 15px;
+  }
+  .form-floating {
+    input {
+      padding-right: 50px !important;
+      @media screen and (max-width: 992px) {
+        padding-right: 20px !important;
+        padding-left: 20px !important;
+      }
+      @media screen and (max-width: 767px) {
+        padding-right: 20px !important;
+        padding-left: 20px !important;
+      }
+    }
+  }
+  .form-floating {
+    .svg-inline--fa {
+      position: absolute;
+      top: 50%;
+      right: 18px;
+      transform: translateY(-50%);
+      font-size: 20px;
+      color: #6f8197;
+    }
+  }
+  h3 {
+    padding: 10px 20px 20px 0;
+    margin-bottom: 20px;
+    background: transparent;
+    font-size: 22px;
+    text-align: left;
+  }
+  .choose-photo {
+    line-height: 45px;
+    border-radius: 50px;
+    &:focus {
+      outline: none;
+      box-shadow: none;
+      border-color: $border-primary;
+    }
+  }
+  .btn-dark {
+    display: block;
+    box-sizing: border-box;
+    padding: 10px 45px;
+    border-radius: 50px;
+    position: relative;
+    overflow: hidden;
+    text-transform: uppercase;
+  }
+  .btn-style {
+    width: 40%;
+    margin: 0 auto;
+    --tilt: 40px;
+    display: block;
+    box-sizing: border-box;
+    padding: 10px 45px;
+    border-radius: 50px;
+    position: relative;
+    overflow: hidden;
+    background: transparent !important;
+    text-transform: uppercase;
+    color: $text-primary !important;
+    @media screen and (max-width: 767px) {
+      width: 100%;
+    }
+    &:before {
+      content: "";
+      z-index: -1;
+      width: calc(100% + 40px);
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: calc(-100% - 40px);
+      background: $bg-primary !important;
+      clip-path: polygon(0 0, calc(100% - 40px) 0, 100% 100%, 0 100%);
+      transition: transform 0.6s;
+    }
+    &:after {
+      content: "";
+      z-index: -1;
+      width: calc(100% + 40px);
+      height: 100%;
+      position: absolute;
+      left: 100%;
+      transform: rotate(180deg);
+      top: 0;
+      background: $bg-primary !important;
+      clip-path: polygon(0 0, calc(100% - 40px) 0, 100% 100%, 0 100%);
+      transition: transform 0.6s;
+    }
+    &:hover {
+      color: $text-white !important;
+      &:before {
+        transform: translateX(100%);
+      }
+      &:after {
+        transform: rotate(180deg) translateX(100%);
+      }
+    }
+  }
+}
+
+// Registration-box --- CSS End
+
+// ---- in Sign up page - Rview details modal and otp modal Header - Start
+.verifymodalheader {
+  background: rgb(2, 0, 36);
+  background: linear-gradient(
+    259deg,
+    rgba(2, 0, 36, 1) 0%,
+    rgba(50, 84, 129, 1) 0%,
+    rgba(2, 0, 36, 1) 100%
+  );
+}
+// ---- in Sign up page - Rview details modal and otp modal Header - End
+
+/* Responsive Start */
+
+@media screen and (min-width: 768px) {
+  .w-md-50 {
+    width: 50% !important;
+  }
+}
+@media screen and (max-width: 767px) {
+  .w-sm-100 {
+    width: 100% !important;
+  }
+}
+/* Responsive End */
+
+/* Loader CSS Start */
+
+.loader-main {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 9999;
+  .spinner-border {
+    border-bottom-color: $border-secondary;
+    border-top-color: $border-light;
+    border-left-color: $border-secondary;
+    width: 4rem;
+    height: 4rem;
+    border-right: none;
+    outline: none;
+  }
+}
+
+/* Loader CSS End */
+
+body.no-scroll {
+  overflow: hidden;
+}
+
+// Banner Wrap Start
+.banner-sec {
+  width: 100%;
+  background-color: $bg-primary;
+  position: relative;
+  .corses-tagline {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    width: 250px;
+    z-index: 1;
+    h2 {
+      color: $text-secondary;
+    }
+  }
+  .image-position {
+    position: relative;
+    img {
+      bottom: 0;
+      left: 0;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+  .content {
+    padding: 100px 0;
+    text-align: left;
+    h5 {
+      color: $text-white;
+      &:after {
+        background: $bg-white;
+      }
+    }
+    h1 {
+      color: $text-white;
+      margin: 10px 0;
+      font-size: 40px;
+    }
+    p {
+      color: $text-white;
+      font-size: 16px;
+      line-height: 26px;
+      font-weight: 300;
+    }
+    a.btn {
+      font-size: 18px;
+      font-weight: 400;
+      padding: 8px 20px;
+    }
+  }
+}
+
+.category-wrap {
+  .subtitle-style {
+    color: $text-primary;
+    &:after {
+      background: $bg-primary;
+    }
+  }
+  .card {
+    border: none;
+    padding: 0;
+    .card-link {
+      text-decoration: none;
+      color: $text-primary;
+    }
+    .card-img {
+      width: 50px;
+      margin: 0 auto;
+    }
+    .card-body {
+      padding-bottom: 0;
+      .card-title {
+        margin-bottom: 0;
+        font-weight: 400;
+        font-size: 16px;
+      }
+    }
+  }
+}
+// Notification Dropdown SCSS
+.notify-drop {
+  background-color: $bg-danger-dark !important;
+  color: $text-white !important;
+}
+
+// -------------Tab------------
+
+.non {
+  .nonee {
+    width: 100%;
+    display: flex;
+    padding: 20px;
+  }
+
+  .non {
+    width: 100%;
+  }
+  .nn {
+    width: 50%;
+    padding: 5px;
+    text-align: start;
+  }
+  .nn h5 {
+    color: #002f6c;
+  }
+  .none {
+    width: 50%;
+    height: 100vh;
+    padding: 5px;
+  }
+  .tab-container {
+    width: 100%;
+    height: 70vh;
+    overflow: hidden;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    // box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+  }
+
+  .tab-header {
+    display: flex;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  .tab {
+    flex: 1;
+    text-align: center;
+    padding: 12px 0;
+    cursor: pointer;
+    font-weight: bold;
+    color: #4a4a4a;
+    background-color: #f8f8f8;
+  }
+
+  .tab.active {
+    color: #002f6c;
+    border-bottom: 1px solid #002f6c;
+  }
+
+  .tab-content {
+    padding: 16px;
+    text-align: start;
+  }
+
+  .notice {
+    max-height: 400px;
+    overflow-y: auto;
+  }
+
+  .notice ul {
+    list-style-type: none;
+    padding: 0;
+  }
+
+  .notice li {
+    margin-bottom: 16px;
+    cursor: pointer;
+  }
+  .notice li:hover {
+    color: #002f6c;
+    text-decoration: underline;
+  }
+
+  .notice span {
+    color: #888;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  @media screen and (max-width: 992px) {
+    .nonee {
+      display: block;
+    }
+    .none {
+      width: 100%;
+    }
+    .nn {
+      margin-top: -5rem;
+      width: 100%;
+      text-align: center;
+    }
+  }
+}
+//joy
+.featured-courses {
+  background-color: #e2e2e2;
+  .featured-courses-slider {
+    overflow: hidden;
+  }
+}
+
+.video-container {
+  .icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  video {
+    width: 100%;
+    height: 500px;
+  }
+  .topics {
+    height: 500px;
+    overflow-y: scroll;
+  }
+  .content {
+    justify-content: space-around;
+  }
+}
+
+// General styles for tabs
+.tab-container {
+  .nav-link {
+    border-radius: 0;
+    border: 1px solid black;
+    background-color: transparent;
+    color: black;
+    margin: 0 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    text-align: center;
+
+    &:hover {
+      background-color: #e0e0e0;
+    }
+  }
+
+  .nav-link.active {
+    background-color: #325481;
+    color: white;
+  }
+}
+
+.tab-content-container {
+  margin-top: 20px;
+}
+
+//give styling to notes section(ANJAN)
+.notes-content {
+  border: 1px solid black;
+  margin-bottom: 20px;
+  padding: 20px;
+
+  .notes-icon {
+    margin-right: 100%;
+    margin-bottom: -1%;
+  }
+
+  .notes-title {
+    display: block;
+    margin-left: 40px;
+    font-family: "Roboto", sans-serif;
+    font-size: 25px;
+    text-align: start;
+    margin-top: -20px;
+  }
+
+  .notes-body {
+    margin-left: 40px;
+    text-align: start;
+    p {
+      margin-bottom: 10px;
+    }
+  }
+}
+
+//style for post question(ANJAN)
+.post-question {
+  border: solid 2px;
+  margin-bottom: 15px;
+  text-align: start;
+  padding: 6px;
+  b {
+    margin-left: 5px;
+  }
+  p {
+    margin-left: 5px;
+  }
+}
+
+.post-question-body {
+  margin-left: 6px;
+}
+
+//post question button(ANJAN)
+.question-form {
+  input {
+    border: 1px solid;
+    width: 100%;
+    text-align: center;
+    height: 50px;
+    font-size: large;
+  }
+  button {
+    background-color: #315481;
+    border-radius: 7px;
+    color: white;
+    width: 200px;
+    height: 50px;
+  }
+}
+
+.post-question {
+  border: solid 1px;
+}
+
+.font-roboto {
+  font-family: "Roboto", sans-serif;
+}
+
+.font-size-25 {
+  font-size: 25px;
+}
+
+//start of design of video.js file (ANJAN)
+.video-container {
+  display: flex;
+  .col-9 {
+    video {
+      width: 100%;
+    }
+  }
+
+  .title {
+    text-align: start;
+    margin-bottom: 5px;
+    b {
+      font-weight: bold;
+    }
+  }
+
+  hr {
+    margin-top: 3px;
+    margin-bottom: 0;
+  }
+
+  .scrollbar {
+    overflow-y: scroll;
+    max-height: 62vh;
+
+    &::-webkit-scrollbar {
+      width: 12px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: #888;
+      border-radius: 10px;
+      border: 3px solid #f1f1f1;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background-color: #555;
+    }
+
+    .list-group-item {
+      display: flex;
+      align-items: start;
+      flex-direction: column;
+      cursor: pointer;
+
+      .d-flex {
+        align-items: center;
+
+        .me-2 {
+          margin-right: 0.5rem;
+        }
+
+        .watched-icon {
+          color: #325481;
+          background-color: white;
+        }
+
+        .unwatched-icon {
+          color: #d3d7f7;
+        }
+      }
+
+      .text-muted {
+        margin-left: 1rem;
+        display: flex;
+        align-items: center;
+
+        .me-2 {
+          margin-right: 0.5rem;
+        }
+      }
+    }
+  }
+}
+
+.faPlay-body {
+  display: flex;
+  align-items: center;
+  margin-left: 25px;
+
+  .faPlay {
+    border-radius: 3px;
+    margin-right: 8px;
+    color: #f6921d;
+    padding: 2px 5px;
+    border: 1px solid;
+  }
+}
+
+//login.js css start from here(ANJAN)
+// Styles for the navigation tabs container
+.tab-style {
+  .nav-link {
+    border-radius: 0.25rem;
+    padding: 0.5rem 1rem;
+    color: $text-primary;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    background-color: transparent;
+    border: 1px solid $border-primary;
+    transition: background-color 0.3s, color 0.3s;
+    margin-top: 5px;
+    &.active {
+      color: $text-white;
+      background-color: $bg-primary;
+    }
+    &:hover {
+      background-color: $bg-primary;
+      border: 1px solid $border-primary;
+      color: $text-white;
+    }
+  }
+}
+
+// Styles for Tab.Content
+.tab-content {
+  .tab-pane {
+    .form {
+      .floating-label {
+        position: relative;
+        margin-bottom: 1rem;
+
+        .form-control {
+          padding-right: 2.5rem;
+        }
+
+        .form-control-feedback {
+          position: absolute;
+          right: 10px;
+          top: 30px;
+          cursor: pointer;
+        }
+      }
+
+      .btn-primary {
+        background-color: #325481;
+        border: none;
+
+        &:hover {
+          background-color: darken(#325481, 10%);
+        }
+      }
+
+      .w-100 {
+        width: 100%;
+        margin-top: 40px;
+      }
+    }
+  }
+}
+
+//start of coursecategory page css
+// Styles for the dropdown container(ANJAN)
+.categories-main {
+  .course-categories-title {
+    margin-top: 10px;
+    .course-title {
+      color: orange;
+      font-size: 30px;
+      font-style: bold;
+    }
+
+    .categories-title {
+      color: $text-primary;
+      font-size: 30px;
+    }
+  }
+  .categories {
+    .dropdown-container {
+      display: flex;
+      gap: 30px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 30px;
+      margin-left: 70px;
+
+      .dropdown-item {
+        flex: 1;
+        max-width: 370px;
+
+        .form-label {
+          margin-bottom: 0.5rem;
+          margin-right: 220px;
+          color: grey;
+        }
+
+        .form-control {
+          height: 2.5rem;
+          padding: 0.5rem;
+          appearance: auto;
+          background-size: 1rem 1rem;
+          border: 1px solid #ced4da;
+          border-radius: 20px;
+          color: grey;
+        }
+      }
+      button[type="submit"] {
+        margin-top: 2rem;
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 20px;
+        background-color: $text-primary;
+        color: white;
+        font-size: 1rem;
+        height: 2.5rem;
+        width: 6rem;
+        margin-right: 5rem;
+        cursor: pointer;
+        transition: background-color 0.3s;
+
+        &:hover {
+          background-color: darken($text-primary, 10%);
+        }
+      }
+    }
+  }
+}
+
+//styling for category card (ANJAN)
+// Define styles for the entire container
+.categories-container {
+  .course-categories-title {
+    margin-bottom: 20px;
+    h1 {
+      .course-title {
+        color: $text-primary;
+      }
+      .categories-title {
+        color: $text-secondary;
+      }
+    }
+  }
+
+  .form-container {
+    margin-bottom: 50px;
+    margin-left: 30px;
+    .form-group {
+      label {
+        margin-right: 170px;
+        color: $text-dark;
+      }
+
+      .form-control {
+        border-radius: 17px;
+      }
+    }
+
+    .filter-button {
+      display: flex;
+      align-items: flex-end;
+      .btn {
+        width: 200px;
+        margin: 0 auto;
+      }
+    }
+  }
+
+  .cards-container {
+    box-shadow: 0 3px 16px rgba(125, 111, 111, 0.2);
+    padding: 25px;
+    .card {
+      max-width: 400px;
+      padding: 12px;
+      width: 100%;
+      box-shadow: 0 0px 16px rgba(125, 111, 111, 0.2);
+      border-radius: 0px;
+      border: 0px;
+      cursor: pointer;
+
+      .card-body {
+        .info-row {
+          margin-bottom: 0.5rem;
+
+          .info-item {
+            display: flex;
+            align-items: center;
+            color: $text-primary;
+
+            &.clock {
+              .icon {
+                color: $text-secondary;
+                margin-right: 4px;
+              }
+            }
+
+            &.book {
+              .icon {
+                color: $text-dark;
+                margin-right: 4px;
+              }
+              justify-content: flex-end;
+            }
+          }
+        }
+
+        .card-title,
+        .card-text {
+          color: $text-primary;
+        }
+
+        .rating {
+          color: $text-info;
+        }
+      }
+    }
+  }
+}

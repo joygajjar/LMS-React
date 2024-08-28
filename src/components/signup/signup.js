@@ -1,241 +1,210 @@
 import React, { useState } from "react";
-import { Container } from "react-bootstrap";
-import Button from "react-bootstrap/Button";
-import FloatingLabel from "react-bootstrap/FloatingLabel";
-import Form from "react-bootstrap/Form";
-import Spinner from "react-bootstrap/Spinner";
-import { Link, useNavigate } from "react-router-dom";
+import { Container, Button, FloatingLabel, Form } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEnvelope, faLock, faPhone } from "@fortawesome/free-solid-svg-icons";
-import { useAuth } from "../../auth/hooks/useAuth";
-import { toast } from "react-toastify";
 import Swal from "sweetalert2";
-import { useTranslation } from 'react-i18next';
+import { useNavigate } from "react-router-dom";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { useAuth } from "../../auth/hooks/useAuth";
 
 export const SignupSec = () => {
-  const { t, i18n } = useTranslation();
-  const [formData, setFormData] = useState({
-    email: "",
-    contact: "",
-    password: "",
-    confirmPassword: ""
-  });
-  const [errors, setErrors] = useState({});
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  // Public Signup States
+  const [pubCandidatename, setPubCandidatename] = useState("");
+  const [pubMobilenumber, setPubMobilenumber] = useState("");
+  const [pubEmail, setPubEmail] = useState("");
+  const [pubPassword, setPubPassword] = useState("");
+  const [pubConfirmPassword, setPubConfirmPassword] = useState("");
+  const [showPubPassword, setShowPubPassword] = useState(false);
+  const [showPubConfirmPassword, setShowPubConfirmPassword] = useState(false);
   const { signup } = useAuth();
+  const navigate = useNavigate();
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-
-    // Validate inputs on change
-    validateInput(name, value);
+  // Toggle Functions for Public Signup
+  const handlePubPasswordToggle = () => {
+    setShowPubPassword(!showPubPassword);
   };
 
-  const validateInput = (name, value) => {
-    let error = {};
-
-    switch (name) {
-      case "email":
-        if (!value) {
-          error[name] = t("Email is required");
-        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-          error[name] = t("Invalid email format");
-        }
-        break;
-      case "contact":
-        if (!value) {
-          error[name] = t("Phone number is required");
-        } else if (!/^\d{10}$/.test(value)) {
-          error[name] = t("Invalid phone number format");
-        }
-        break;
-      case "password":
-        if (!value) {
-          error[name] = t("Password is required");
-        } else if (!/^[A-Z][a-z]{5,}(?=.*\d{3,})(?=.*[^a-zA-Z\d\s]).*$/.test(value)) {
-          error[name] = t("Password must start with a capital letter, be at least 6 characters long, contain only lowercase letters after the first capital letter, have at least one symbol, and include at least 3 numbers");
-        }
-        break;
-      case "confirmPassword":
-        if (!value) {
-          error[name] = t("Confirm Password is required");
-        } else if (value !== formData.password) {
-          error[name] = t("Passwords do not match");
-        }
-        break;
-      default:
-        break;
-    }
-
-    // Update the errors state
-    setErrors((prevErrors) => {
-      // Remove the error for the input if the validation passes
-      if (!error[name]) {
-        const { [name]: removedError, ...rest } = prevErrors;
-        return rest;
-      }
-
-      // Otherwise, return the updated errors object
-      return {
-        ...prevErrors,
-        ...error,
-      };
-    });
+  const handlePubConfirmPasswordToggle = () => {
+    setShowPubConfirmPassword(!showPubConfirmPassword);
   };
 
-  const handleSubmit = async (evt) => {
-    evt.preventDefault();
-
-    // Validate all fields before submitting
-    let hasErrors = false;
-    for (const key in formData) {
-      validateInput(key, formData[key]);
-      if (errors[key]) {
-        hasErrors = true;
-      }
-    }
-
-    // If there are errors, prevent form submission
-    if (hasErrors) {
+  const handleSubmit = async () => {
+    if (!pubCandidatename.trim()) {
+      Swal.fire({
+        icon: "error",
+        title: "Name is required",
+        text: "Please enter your name.",
+      });
       return;
     }
 
-    setLoading(true);
-
-    // Remove any non-digit characters from the phone number
-    let phoneNumber = formData.contact.replace(/\D/g, "");
-
-    // Check if the phone number starts with '0' or if it is a 10-digit number
-    if (phoneNumber.startsWith("0")) {
-      phoneNumber = "+91" + phoneNumber.slice(1);
-    } else if (phoneNumber.length === 10) {
-      phoneNumber = "+91" + phoneNumber;
-    }
-
-    // Update formData with the formatted phone number
-    const updatedFormData = { ...formData, contact: phoneNumber };
-
-    // Check if the contact number is a valid Indian mobile number
-    if (!isValidIndianMobileNumber(phoneNumber.replace("+91", ""))) {
-      setLoading(false);
-      // If not valid, show an alert using SweetAlert
+    if (!/^\d{10}$/.test(pubMobilenumber)) {
+      Swal.fire({
+        icon: "error",
+        title: "Invalid Mobile Number",
+        text: "Please enter a valid 10-digit mobile number.",
+      });
       return;
     }
 
-    const response = await signup(updatedFormData);
-    let { status, message } = response;
-    setLoading(false);
-    console.log("response signup component", response);
-    if (status) {
-      toast.success(message);
-      navigate(
-        "/otp?email=" + formData.email + "&contact=" + phoneNumber
-      );
-    } else {
-      toast.error(message);
+    if (!/^\S+@\S+\.\S+$/.test(pubEmail)) {
+      Swal.fire({
+        icon: "error",
+        title: "Invalid Email",
+        text: "Please enter a valid email address.",
+      });
+      return;
     }
-  };
 
-  // Function to check if the phone number is a valid Indian mobile number
-  const isValidIndianMobileNumber = (phoneNumber) => {
-    const indianMobileNumberRegex = /^[6-9]\d{9}$/;
-    return indianMobileNumberRegex.test(phoneNumber);
+    if (
+      pubPassword.length < 8 ||
+      !/\d/.test(pubPassword) ||
+      !/[!@#$%^&*]/.test(pubPassword)
+    ) {
+      Swal.fire({
+        icon: "error",
+        title: "Weak Password",
+        text: "Password must be at least 8 characters long and contain a number and a special character.",
+      });
+      return;
+    }
+
+    if (pubPassword !== pubConfirmPassword) {
+      Swal.fire({
+        icon: "error",
+        title: "Passwords do not match",
+        text: "Please ensure both password fields match.",
+      });
+      return;
+    }
+
+    try {
+      // Call APIs
+      Swal.fire({
+        title: "Confirm?",
+        text: "Do you want to final submit?",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          signup({
+            username: pubCandidatename,
+            email: pubEmail,
+            phonenumber: pubMobilenumber,
+            password: pubPassword,
+          });
+          navigate("/verifyotp");
+        }
+      });
+    } catch (error) {
+      console.error("Error submitting data:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Submission Error",
+        text: "There was an error submitting your data. Please try again.",
+      });
+    }
   };
 
   return (
     <React.Fragment>
       <Container>
-        <div className="section-title">
-          <h2 className="text-primary">{t("Register")}</h2>
-          <p className="text-dark">{t("Create an Account")}</p>
+        <div className="section-title text-center mb-4">
+          <h2 className="text-primary">Sign Up</h2>
         </div>
-        <div className="form-box text-start">
-          <Form onSubmit={handleSubmit}>
-            <FloatingLabel controlId="floatingInput" label={t("Email ID")} className="mb-3">
-              <Form.Control
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                placeholder={t("Enter Your Email Address")}
-                isInvalid={!!errors.email}
-              />
-              <Form.Control.Feedback type="invalid">
-                {errors.email}
-              </Form.Control.Feedback>
-              {!errors.email && <FontAwesomeIcon icon={faEnvelope} />}
-            </FloatingLabel>
-            <FloatingLabel controlId="floatingInput" label={t("Phone No")} className="mb-3">
-              <Form.Control
-                type="text"
-                name="contact"
-                value={formData.contact}
-                onChange={handleInputChange}
-                placeholder={t("Enter Your Mobile No")}
-                isInvalid={!!errors.contact}
-              />
-              <Form.Control.Feedback type="invalid">
-                {errors.contact}
-              </Form.Control.Feedback>
-              {!errors.contact && <FontAwesomeIcon icon={faPhone} />}
-            </FloatingLabel>
-            <FloatingLabel controlId="floatingPassword" label={t("Password")} className="mb-3">
-              <Form.Control
-                type="password"
-                id="password"
-                name="password"
-                value={formData.password}
-                onChange={handleInputChange}
-                placeholder={t("Enter Password")}
-                isInvalid={!!errors.password}
-              />
-              <Form.Control.Feedback type="invalid">
-                {errors.password}
-              </Form.Control.Feedback>
-              {!errors.password && <FontAwesomeIcon icon={faLock} />}
-            </FloatingLabel>
-            <FloatingLabel controlId="floatingPassword" label={t("Confirm Password")} className="mb-3">
-              <Form.Control
-                type="password"
-                id="confirmPassword"
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleInputChange}
-                placeholder={t("Enter Confirm Password")}
-                isInvalid={!!errors.confirmPassword}
-              />
-              <Form.Control.Feedback type="invalid">
-                {errors.confirmPassword}
-              </Form.Control.Feedback>
-              {!errors.confirmPassword && <FontAwesomeIcon icon={faLock} />}
-            </FloatingLabel>
-
-            <Button variant="primary" type="submit" disabled={loading || Object.keys(errors).length > 0}>
-              {loading ? (
-                <Spinner
-                  as="span"
-                  animation="border"
-                  size="sm"
-                  role="status"
-                  aria-hidden="true"
+        <div className="d-flex justify-content-center">
+          <div className="form-box">
+            <Form>
+              <FloatingLabel
+                controlId="floatingPubName"
+                label="Name"
+                className="mb-3"
+              >
+                <Form.Control
+                  type="text"
+                  placeholder="Name"
+                  value={pubCandidatename}
+                  onChange={(e) => setPubCandidatename(e.target.value)}
                 />
-              ) : (
-                <span>{t("Signup")}</span>
-              )}
-            </Button>
-
-            <Form.Text className="w-100 d-inline-block text-center mt-3">
-              {t("Already have an account?")}{" "}
-              <Link to="/login" className="text-secondary text-decoration-none">
-                {t("Login")}
-              </Link>
-            </Form.Text>
-          </Form>
+              </FloatingLabel>
+              <FloatingLabel
+                controlId="floatingPubMobileNumber"
+                label="Mobile Number"
+                className="mb-3"
+              >
+                <Form.Control
+                  type="text"
+                  placeholder="Mobile Number"
+                  value={pubMobilenumber}
+                  onChange={(e) => setPubMobilenumber(e.target.value)}
+                />
+              </FloatingLabel>
+              <FloatingLabel
+                controlId="floatingPubEmail"
+                label="Email"
+                className="mb-3"
+              >
+                <Form.Control
+                  type="email"
+                  placeholder="Email"
+                  value={pubEmail}
+                  onChange={(e) => setPubEmail(e.target.value)}
+                />
+              </FloatingLabel>
+              <FloatingLabel
+                controlId="floatingPubPassword"
+                label="Password"
+                className="mb-3 position-relative"
+              >
+                <Form.Control
+                  type={showPubPassword ? "text" : "password"}
+                  placeholder="Password"
+                  value={pubPassword}
+                  onChange={(e) => setPubPassword(e.target.value)}
+                />
+                <FontAwesomeIcon
+                  icon={showPubPassword ? faEyeSlash : faEye}
+                  onClick={handlePubPasswordToggle}
+                  style={{
+                    cursor: "pointer",
+                    position: "absolute",
+                    right: "10px",
+                    top: "50%",
+                  }}
+                />
+              </FloatingLabel>
+              <FloatingLabel
+                controlId="floatingPubConfirmPassword"
+                label="Confirm Password"
+                className="mb-3 position-relative"
+              >
+                <Form.Control
+                  type={showPubConfirmPassword ? "text" : "password"}
+                  placeholder="Confirm Password"
+                  value={pubConfirmPassword}
+                  onChange={(e) => setPubConfirmPassword(e.target.value)}
+                />
+                <FontAwesomeIcon
+                  icon={showPubConfirmPassword ? faEyeSlash : faEye}
+                  onClick={handlePubConfirmPasswordToggle}
+                  style={{
+                    cursor: "pointer",
+                    position: "absolute",
+                    right: "10px",
+                    top: "50%",
+                  }}
+                />
+              </FloatingLabel>
+              <Button
+                variant="primary"
+                onClick={handleSubmit}
+                className="mt-3 w-100"
+              >
+                <span>Sign Up</span>
+              </Button>
+            </Form>
+          </div>
         </div>
       </Container>
     </React.Fragment>

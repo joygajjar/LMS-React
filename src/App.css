@@ -32,6 +32,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -50,16 +51,52 @@
   0% {
     transform: translateX(0);
   }
+
   25% {
     transform: translateX(-5px);
   }
+
   50% {
     transform: translateX(5px);
   }
+
   75% {
     transform: translateX(-5px);
   }
+
   100% {
     transform: translateX(0);
   }
 }
+
+
+.modal-backdrop {
+  background-color: rgba(196, 190, 190, 0.5) !important;
+  /* Dark background for modal backdrop */
+
+}
+
+.profile-img img {
+  border-radius: 50px;
+}
+
+.modal-dialog {
+
+  width: 5;
+  height: 80%;
+  border-radius: 50%;
+}
+
+.modal-dialog img {
+  border-radius: 50%;
+  width: 60%;
+}
+
+.animate__animated.animate__fadeInDown {
+  --animate-duration: 1s;
+  height: 200px;
+  overflow-y: scroll;
+  scrollbar-width: none;
+
+}
+

@@ -1,8 +1,8 @@
 import { common_service, primaryApi, secondaryApi } from './api';
-
+import axios from 'axios';
 export const signup = async (data) => {
     try {
-        const response = await primaryApi.post('/send-otp', data);
+        const response = await primaryApi.post('/auth/signup', data);
         console.log("auth service response", response)
         return response.data;
     } catch (error) {
@@ -40,7 +40,7 @@ export const resendOtp = async (data) => {
 
 export const login = async (data) => {
     try {
-        const response = await primaryApi.post('/login', data);
+        const response = await primaryApi.post('/auth/signin', data);
         console.log("auth service response", response);
         return response.data;
     } catch (error) {
@@ -227,3 +227,91 @@ export const uploadFile = async (file) => {
       return { status: false, message: "An unexpected error occurred" };
   }
 };
+
+export const fetchDocuments = async (email) => {
+  try {
+      const response = await fetch(`http://localhost:9095/api/student/${email}`);
+      if (!response.ok) {
+          throw new Error('Failed to fetch documents');
+      }
+      const data = await response.json();
+      return data;
+  } catch (error) {
+      console.error('Error fetching documents:', error);
+  }
+};
+
+export const viewDocument = async (fileName) => {
+  try {
+      const response = await secondaryApi.get(`/download/${encodeURIComponent(fileName)}`, {
+          responseType: 'blob',
+      });
+
+      let fileType = '';
+      if (fileName.endsWith('.pdf')) {
+          fileType = 'application/pdf';
+      } else if (fileName.endsWith('.png')) {
+          fileType = 'image/png';
+      } else if (fileName.endsWith('.jpg') || fileName.endsWith('.jpeg')) {
+          fileType = 'image/jpeg';
+      } else {
+          console.error('Unsupported file type');
+          alert('Unsupported file type. Cannot open the document.');
+          return;
+      }
+
+      const file = new Blob([response.data], { type: fileType });
+      const fileURL = URL.createObjectURL(file);
+      window.open(fileURL, '_blank');
+  } catch (error) {
+      console.error('Error viewing document:', error);
+      alert('Error viewing document. Please try again.');
+  }
+};
+export const viewProfile = async (token) => {
+  try {
+    const response = await secondaryApi.get('/view-profile', {
+      headers: {
+        Authorization: token,
+      },
+    });
+    return response.data;  // Return response data assuming it's JSON
+  } catch (error) {
+    console.error('Error fetching profile data:', error);
+    throw error;  // Rethrow the error so the caller can handle it
+  }
+};
+
+export const uploadProfileFile = async (file, email) => {
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('email', email);
+
+    const response = await secondaryApi.put('/profile/upload', formData, {
+      headers: {
+          'Content-Type': 'multipart/form-data'
+      }
+  });
+
+    return response.data;  // Assuming response.data contains updated profile data
+  } catch (error) {
+    console.error('Error uploading profile file:', error);
+    throw error;
+  }
+};
+
+
+export const fetchProfileByEmail = async (email) => {
+  try {
+    const response = await secondaryApi.get(`/profile/${encodeURIComponent(email)}`, {
+  
+    });
+
+    return response.data;  // Assuming response.data contains profile data
+  } catch (error) {
+    console.error('Error fetching profile data:', error);
+    throw error;
+  }
+};
+

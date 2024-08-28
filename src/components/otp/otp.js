@@ -11,10 +11,12 @@ import { initialsendOtpData } from "../constant/ComponentState";
 import Spinner from "react-bootstrap/Spinner";
 import successSound from "../assets/success.wav";
 import { useTranslation } from "react-i18next";
+import Loader from "../loadSpinner/loader";
+import { useLoading } from "../LoadingContext";
 
 export const OtpSec = () => {
+  const { isLoading, setIsLoading } = useLoading(); 
   const { t } = useTranslation();
-
   const { sendOtp, resendOtp } = useAuth();
   const searchParams = queryString.parse(window.location.search);
   const emailId = searchParams.email;
@@ -31,6 +33,19 @@ export const OtpSec = () => {
   const [disableResend, setDisableResend] = useState(false);
   const [resendTimer, setResendTimer] = useState(30);
 
+  useEffect(() => {
+    if (isLoading) {
+      document.body.classList.add("no-scroll");
+    } else {
+      document.body.classList.remove("no-scroll");
+    } 
+    setTimeout(() => {
+      setIsLoading(false);
+      document.body.classList.remove("no-scroll");
+    }, 1000);
+  }, []);
+
+
   const playSuccessSound = () => {
     const audio = new Audio(successSound);
     audio.play();
@@ -45,14 +60,17 @@ export const OtpSec = () => {
 
   const handleSubmit = async (evt) => {
     evt.preventDefault();
+    setIsLoading(true);
     setLoading(true);
     const response = await sendOtp(formData);
     const { status, message } = response;
     if (status) {
+      setIsLoading(true);
       navigate("/login");
       toast.success("OTP verification successful.");
     } else {
       playSuccessSound();
+      setIsLoading(false);
       toast.error(message);
     }
     setLoading(false);
@@ -62,14 +80,16 @@ export const OtpSec = () => {
     const response = await resendOtp(formData);
     const { status, message } = response;
     if (status) { 
+      setIsLoading(true);
       toast.success(message);
-      navigate("/otp?email=" + formData.email + "&contact=" + formData.contact);
+     navigate("/otp?email=" + formData.email + "&contact=" + formData.contact);
       setDisableResend(true);
       setResendTimer(30);
       startResendTimer();
     } else {
       const { message } = response;
       toast.error(message);
+      setIsLoading(false);
     }
   };
 
@@ -97,6 +117,7 @@ export const OtpSec = () => {
 
   return (
     <React.Fragment>
+         {isLoading && <Loader />}
       <Container>
         <div className="section-title">
           <h2 className="text-primary">{t("Verification")}</h2>
